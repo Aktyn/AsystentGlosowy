@@ -1,0 +1,10 @@
+D:\Programowanie\AsystentGlosowy\Asystent\obj\Release\netcoreapp2.2\Asystent.csprojAssemblyReference.cache
+D:\Programowanie\AsystentGlosowy\Asystent\obj\Release\netcoreapp2.2\Asystent.AssemblyInfoInputs.cache
+D:\Programowanie\AsystentGlosowy\Asystent\obj\Release\netcoreapp2.2\Asystent.AssemblyInfo.cs
+D:\Programowanie\AsystentGlosowy\Asystent\bin\Release\netcoreapp2.2\Asystent.deps.json
+D:\Programowanie\AsystentGlosowy\Asystent\bin\Release\netcoreapp2.2\Asystent.runtimeconfig.json
+D:\Programowanie\AsystentGlosowy\Asystent\bin\Release\netcoreapp2.2\Asystent.runtimeconfig.dev.json
+D:\Programowanie\AsystentGlosowy\Asystent\bin\Release\netcoreapp2.2\Asystent.dll
+D:\Programowanie\AsystentGlosowy\Asystent\bin\Release\netcoreapp2.2\Asystent.pdb
+D:\Programowanie\AsystentGlosowy\Asystent\obj\Release\netcoreapp2.2\Asystent.dll
+D:\Programowanie\AsystentGlosowy\Asystent\obj\Release\netcoreapp2.2\Asystent.pdb
