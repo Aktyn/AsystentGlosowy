@@ -4,9 +4,7 @@ namespace Asystent {
 	class Program {
 		private static void Main() {
 			var connection = new ClientConnection();
-			var handler = new MessageHandler();
-			
-			connection.OnMessage += handler.OnMessage;
+			connection.OnMessage += MessageHandler.OnMessage;
 
 			//keeps console alive
 			var input = Console.ReadLine();

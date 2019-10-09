@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 
 namespace Asystent {
-    public delegate void MessageListener(string message);
+    public delegate void MessageListener(string message, IWebSocketConnection clientConn);
     
     public class ClientConnection {
-        private static string SOCKET_URL = "ws://127.0.0.1:6969";
+        private static string SOCKET_URL = "ws://127.0.0.1:7000";
         private readonly WebSocketServer _wsServer = new WebSocketServer(SOCKET_URL);
         private readonly List<IWebSocketConnection> _connections = new List<IWebSocketConnection>();
         
@@ -35,7 +35,7 @@ namespace Asystent {
                 };
                 socket.OnMessage = (message) => {
                     if(OnMessage != null) 
-                        OnMessage(message);
+                        OnMessage(message, socket);
                     //socket.Send(message);
                 };
             });

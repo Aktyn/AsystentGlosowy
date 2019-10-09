@@ -1,7 +1,7 @@
-import React from 'react';
+﻿import React from 'react';
 
-const micIsOnImage = require('./icons/mic-on-24px.svg');
-const micIsOffImage = require('./icons/mic-off-24px.svg');
+const micIsOnImage = require('../icons/mic-on-24px.svg');
+const micIsOffImage = require('../icons/mic-off-24px.svg');
 
 export default class Microphone extends React.Component {
     state = {

@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v2.2": {
       "Asystent/1.0.0": {
         "dependencies": {
-          "Fleck": "1.1.0"
+          "Fleck": "1.1.0",
+          "Newtonsoft.Json": "12.0.2"
         },
         "runtime": {
           "Asystent.dll": {}
@@ -19,6 +20,14 @@
           "lib/netcoreapp2.0/Fleck.dll": {
             "assemblyVersion": "1.1.0.0",
             "fileVersion": "1.1.0.0"
+          }
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.2.23222"
           }
         }
       }
@@ -36,6 +45,13 @@
       "sha512": "sha512-X33W1PqRciRmh8Q23klEv3CiRS681IUJj/Ldlgi96lSfq1Uaux3l1qNewRDboiUxnHfoNtcIhFMIhc9AJ4cw6g==",
       "path": "fleck/1.1.0",
       "hashPath": "fleck.1.1.0.nupkg.sha512"
+    },
+    "Newtonsoft.Json/12.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
+      "path": "newtonsoft.json/12.0.2",
+      "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
     }
   }
 }
