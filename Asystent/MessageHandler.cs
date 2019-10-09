@@ -16,13 +16,11 @@ namespace Asystent {
 
 		private List<SpeechResult> _results;
 		private readonly ulong _index;
-		private readonly IWebSocketConnection _clientConn;
 		private ProcedureBase _procedure;
 
-		private MessageHandler(List<SpeechResult> results, ulong index, IWebSocketConnection clientConn) {
+		private MessageHandler(List<SpeechResult> results, ulong index) {
 			_results = results;
 			_index = index;
-			_clientConn = clientConn;
 		}
 
 		private void Update(List<SpeechResult> updatedResults, ulong index) {
@@ -70,7 +68,7 @@ namespace Asystent {
 			if( _handler != null )
 				_handler.Update(results, index);
 			else
-				_handler = new MessageHandler(results, index, clientConn);
+				_handler = new MessageHandler(results, index);
 
 			if (!_handler.Execute(clientConn)) return new SpeechResponse {res = "ignored"};
 			
