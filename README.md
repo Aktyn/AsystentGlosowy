@@ -1,2 +1,4 @@
-# AsystentGlosowy
-Projekt stworzony w celach edukacyjnych
+### AsystentGlosowy
+Projekt stworzony na potrzeby zaliczenia przedmiotu na studiach
+
+

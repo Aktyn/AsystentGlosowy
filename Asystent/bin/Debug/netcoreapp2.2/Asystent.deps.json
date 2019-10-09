@@ -9,6 +9,7 @@
       "Asystent/1.0.0": {
         "dependencies": {
           "Fleck": "1.1.0",
+          "Google.Apis.YouTube.v3": "1.41.1.1699",
           "Newtonsoft.Json": "12.0.2"
         },
         "runtime": {
@@ -20,6 +21,57 @@
           "lib/netcoreapp2.0/Fleck.dll": {
             "assemblyVersion": "1.1.0.0",
             "fileVersion": "1.1.0.0"
+          }
+        }
+      },
+      "Google.Apis/1.41.1": {
+        "dependencies": {
+          "Google.Apis.Core": "1.41.1",
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.Auth/1.41.1": {
+        "dependencies": {
+          "Google.Apis": "1.41.1",
+          "Google.Apis.Core": "1.41.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          },
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.Core/1.41.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.YouTube.v3/1.41.1.1699": {
+        "dependencies": {
+          "Google.Apis": "1.41.1",
+          "Google.Apis.Auth": "1.41.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.YouTube.v3.dll": {
+            "assemblyVersion": "1.41.1.1699",
+            "fileVersion": "1.41.1.1699"
           }
         }
       },
@@ -45,6 +97,34 @@
       "sha512": "sha512-X33W1PqRciRmh8Q23klEv3CiRS681IUJj/Ldlgi96lSfq1Uaux3l1qNewRDboiUxnHfoNtcIhFMIhc9AJ4cw6g==",
       "path": "fleck/1.1.0",
       "hashPath": "fleck.1.1.0.nupkg.sha512"
+    },
+    "Google.Apis/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/gNhxyiCY66ElHrOG0jMg6l13++PXFn69ULoeDabA92z4tCMzTBToY2XuuZhcxHzROcAjiVWPpj03ZEJl7s5kg==",
+      "path": "google.apis/1.41.1",
+      "hashPath": "google.apis.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.Auth/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zsb5QnQVDaeU4rTnYcRJead+obLEsi+iJH/T12+zUzu7/r5Pg6PD/I8RW7aG3qJ6TLyLpKDKDgm/IyQ6G4qOFg==",
+      "path": "google.apis.auth/1.41.1",
+      "hashPath": "google.apis.auth.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.Core/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6jZDk7VsnZGLXGREYdy+3v4Xvdtc6zJs9E4mkxmKC3d1B1NxK0fBX0Ir6/wFdmEt95cnoILRQVi2vNCisU6hIg==",
+      "path": "google.apis.core/1.41.1",
+      "hashPath": "google.apis.core.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.YouTube.v3/1.41.1.1699": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eu1dwltfViUo97wIbvv9OhWzqOj3ze/MT8PczgutjT63sfZHGk7G53EQ797lTpOK3aSbjepE3KnIdYPLtAFn0g==",
+      "path": "google.apis.youtube.v3/1.41.1.1699",
+      "hashPath": "google.apis.youtube.v3.1.41.1.1699.nupkg.sha512"
     },
     "Newtonsoft.Json/12.0.2": {
       "type": "package",

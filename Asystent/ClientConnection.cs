@@ -34,8 +34,7 @@ namespace Asystent {
                     _connections.Remove(socket);
                 };
                 socket.OnMessage = (message) => {
-                    if(OnMessage != null) 
-                        OnMessage(message, socket);
+                    OnMessage?.Invoke(message, socket);
                     //socket.Send(message);
                 };
             });

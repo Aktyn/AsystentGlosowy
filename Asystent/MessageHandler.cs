@@ -7,20 +7,22 @@ using Fleck;
 using Newtonsoft.Json;
 
 namespace Asystent {
-	enum MessageType {
+	internal enum MessageType {
 		SpeechResult = 1
 	}
 
 	public class MessageHandler {
-		private static MessageHandler _handler = null;
+		private static MessageHandler _handler;
 
 		private List<SpeechResult> _results;
 		private readonly ulong _index;
+		private readonly IWebSocketConnection _clientConn;
 		private ProcedureBase _procedure;
 
-		private MessageHandler(List<SpeechResult> results, ulong index) {
-			_index = index;
+		private MessageHandler(List<SpeechResult> results, ulong index, IWebSocketConnection clientConn) {
 			_results = results;
+			_index = index;
+			_clientConn = clientConn;
 		}
 
 		private void Update(List<SpeechResult> updatedResults, ulong index) {
@@ -29,7 +31,7 @@ namespace Asystent {
 			_results = updatedResults;
 		}
 
-		private bool Execute() {
+		private bool Execute(IWebSocketConnection clientConn) {
 			if( _procedure != null ) {
 				_procedure.Update(_results);
 			}
@@ -48,6 +50,11 @@ namespace Asystent {
 				}
 
 				_procedure = matchingProcedures.First();
+				_procedure.OnSendData += data => {
+					clientConn.Send(JsonConvert.SerializeObject(data));
+				};
+				
+				_procedure.Update(_results);
 			}
 		
 			return _procedure.IsFinished();
@@ -57,13 +64,15 @@ namespace Asystent {
 			return _procedure;
 		}
 
-		private static SpeechResponse HandleSpeechResult(List<SpeechResult> results, ulong index) {
+		private static SpeechResponse HandleSpeechResult(List<SpeechResult> results, ulong index, 
+			IWebSocketConnection clientConn) 
+		{
 			if( _handler != null )
 				_handler.Update(results, index);
 			else
-				_handler = new MessageHandler(results, index);
+				_handler = new MessageHandler(results, index, clientConn);
 
-			if (!_handler.Execute()) return new SpeechResponse {res = "ignored"};
+			if (!_handler.Execute(clientConn)) return new SpeechResponse {res = "ignored"};
 			
 			ProcedureBase procedure = _handler.GetProcedure();
 			if (procedure == null)
@@ -83,7 +92,7 @@ namespace Asystent {
 
 				switch ((MessageType) data.type) {
 					case MessageType.SpeechResult:
-						response = HandleSpeechResult(data.results, data.result_index);
+						response = HandleSpeechResult(data.results, data.result_index, clientConn);
 						break;
 					default:
 						Console.WriteLine("Incorrect message format");

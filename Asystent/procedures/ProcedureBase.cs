@@ -10,19 +10,25 @@ namespace Asystent.procedures {
 		FINAL = 2,
 		ALTERNATIVE = 3
 	}
+	
+	public delegate void SendDataListener(object data);
 
 	public abstract class ProcedureBase {
-		private static Type[] procedures = { typeof(Example) };
-		public static Regex regex = null;
+		private static Type[] procedures = { typeof(Example), typeof(YoutubePlay) };
+		//public static Regex regex = null;
 
 		protected List<SpeechResult> Results;
 		protected bool Finished = false;
+		
+		public event SendDataListener OnSendData;
 
-		public ProcedureBase(List<SpeechResult> results) {
-			Results = results;
-		}
+		protected ProcedureBase() { }
 
 		abstract public void Update(List<SpeechResult> results);
+
+		protected void SendData(object data) {
+			OnSendData?.Invoke(data);
+		}
 
 		public bool IsFinished() {
 			return Finished;
@@ -41,7 +47,7 @@ namespace Asystent.procedures {
 					//if at least one result matches regex - corresponding procedure is added to matching list
 					foreach (SpeechResult res in results) {
 						if (!procedureRegex.Match(res.result).Success) continue;
-						matching.Add( (ProcedureBase)Activator.CreateInstance(procedureClass, results) );
+						matching.Add( (ProcedureBase)Activator.CreateInstance(procedureClass) );
 						break;
 					}
 				}

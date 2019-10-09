@@ -10,10 +10,18 @@ export const MESSAGE_TYPE = {
 
 /** @param {Object} data */
 function handleJSON(data) {
-	console.log( 'data', data );
+	console.log('data', data);
 	
-	if( data.res === 'executed' ) {
-		SpeechModule.ignoreIndex(data.index);
+	switch (data.res) {
+		case 'executed':
+			SpeechModule.ignoreIndex(data.index);
+			break;
+		case 'request_song':
+			//TODO
+			break;
+		default:
+			console.warn('Unknown server message');
+			break;
 	}
 }
 
@@ -32,8 +40,6 @@ function connect() {
 	};
 	
 	socket.onmessage = function (e) {
-		console.log("Message from asystent:", e.data);
-		
 		if(typeof e.data !== 'string')
 			return;
 		try {

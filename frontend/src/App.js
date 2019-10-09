@@ -50,7 +50,7 @@ export default class App extends React.Component {
 				<div><input type="text" placeholder="Example command" onKeyDown={e => {
 					if (e.key === 'Enter') {
 						// noinspection JSUnresolvedVariable
-						if(e.target.value === 'test') {
+						if(e.target.value === 'test1') {
 							sendCommand({
 								type: MESSAGE_TYPE.speech_result,//test speech results (some predefined code)
 								results: [
@@ -65,8 +65,19 @@ export default class App extends React.Component {
 										type: RESULT_TYPE.ALTERNATIVE
 									},
 								],
-								result_index: 5
+								result_index: 2
 							});
+						}
+						else if(e.target.value === 'test2') {
+							sendCommand({
+								type: MESSAGE_TYPE.speech_result,
+								results: [{
+									result: 'zagraj piosenkę nie bądź taki szybki bil',
+									confidence: 0.700,
+									type: RESULT_TYPE.FINAL
+								}],
+								result_index: 3
+							})
 						}
 						else { // noinspection JSUnresolvedVariable
 							sendCommand(e.target.value);
