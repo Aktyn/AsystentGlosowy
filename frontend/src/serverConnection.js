@@ -16,6 +16,7 @@ function handleJSON(data) {
 		case 'executed':
 			SpeechModule.ignoreIndex(data.index);
 			break;
+		case 'ignored': break;
 		case 'request_song':
 			//TODO
 			break;
