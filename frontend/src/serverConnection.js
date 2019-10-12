@@ -1,5 +1,8 @@
 ﻿import SpeechModule from './speechModule';
 
+const EventEmitter = require('events');
+export const eventEmitter = new EventEmitter();
+
 const SERVER_URL = "ws://localhost:7000";
 let socket;
 let connected = false;//TODO: emitting connection change events
@@ -18,7 +21,12 @@ function handleJSON(data) {
 			break;
 		case 'ignored': break;
 		case 'request_song':
-			//TODO
+			if(data.video_id && data.title) {
+				eventEmitter.emit('songRequested', data.video_id, data.title);
+			}
+			else {
+				console.error('Problem with requesting song, no video_id or title provided')
+			}
 			break;
 		default:
 			console.warn('Unknown server message');
