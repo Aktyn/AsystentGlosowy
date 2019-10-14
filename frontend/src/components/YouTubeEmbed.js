@@ -1,6 +1,8 @@
 import React from 'react';
 import YouTube from "react-youtube";
 
+import {eventEmitter} from "../serverConnection";
+
 export default class YouTubeEmbed extends React.Component {
     options = {
         height: '390',
@@ -10,12 +12,34 @@ export default class YouTubeEmbed extends React.Component {
         }
     };
 
+    componentDidMount() {
+        eventEmitter.on('play', () => {
+            YouTubeEmbed.playVideo(this.e)
+        });
+
+        eventEmitter.on('pause', () => {
+            YouTubeEmbed.pauseVideo(this.e)
+        });
+
+        eventEmitter.on('mute', () => {
+            YouTubeEmbed.muteVideo(this.e)
+        });
+
+        eventEmitter.on('unmute', () => {
+            YouTubeEmbed.unmuteVideo(this.e)
+        });
+
+        eventEmitter.on('setVolume', (volume) => {
+            YouTubeEmbed.setVolume(this.e, volume)
+        });
+    }
+
     render() {
         return (
             <YouTube
                 videoId={this.props.videoId}
                 opts={this.options}
-                onReady={YouTubeEmbed.pauseVideo}
+                onReady={e => this.e = e}
             />
         );
     }
@@ -26,8 +50,8 @@ export default class YouTubeEmbed extends React.Component {
         console.log('Pausing the video')
     }
 
-    static resumeVideo(event) {
-        event.target.resumeVideo();
+    static playVideo(event) {
+        event.target.playVideo();
         console.log('Resuming the video')
     }
 
@@ -36,7 +60,12 @@ export default class YouTubeEmbed extends React.Component {
         console.log('Muting the video')
     }
 
-    static setVolume(event) {
-        event.target.setVolume(70) //todo
+    static unmuteVideo(event) {
+        event.target.unMute();
+        console.log('Muting the video')
+    }
+
+    static setVolume(event, volume) {
+        event.target.setVolume(volume)
     }
 }

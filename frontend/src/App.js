@@ -1,7 +1,7 @@
 import React from 'react';
 import Microphone from './components/Microphone';
 import YouTubeEmbed from "./components/YouTubeEmbed";
-import {MESSAGE_TYPE, sendCommand, eventEmitter} from './serverConnection';
+import {MESSAGE_TYPE, sendCommand, eventEmitter, handleJSON} from './serverConnection';
 import SpeechModule, {RESULT_TYPE} from './speechModule';
 
 import './App.css';
@@ -11,6 +11,7 @@ export default class App extends React.Component {
 	state = {
 		videoId: null,
 		title: null,
+		speechText: '',
 	};
 	
 	componentDidMount() {
@@ -50,6 +51,9 @@ export default class App extends React.Component {
 	 */
 	_onSpeechResults(results, result_index) {
 		console.log( results, result_index );
+		this.setState({
+			speechText: results[0].result
+		})
 		
 		sendCommand({
 			type: MESSAGE_TYPE.speech_result,
@@ -94,6 +98,17 @@ export default class App extends React.Component {
 								result_index: 3
 							})
 						}
+						else if(e.target.value === 'test3') {
+							sendCommand({
+								type: MESSAGE_TYPE.speech_result,
+								results: [{
+									result: 'zagraj piosenkę tiesto adagio for strings',
+									confidence: 0.700,
+									type: RESULT_TYPE.FINAL
+								}],
+								result_index: 4
+							})
+						}
 						else { // noinspection JSUnresolvedVariable
 							sendCommand(e.target.value);
 						}
@@ -102,6 +117,14 @@ export default class App extends React.Component {
 					}
 				}}/></div>
 				{this.state.videoId && this.state.title ? <YouTubeEmbed videoId={this.state.videoId} /> : null}
+				<div>
+					{this.state.speechText ? <p>{this.state.speechText}</p> : null}
+				</div>
+				<button id='playBtn' onClick={ () => handleJSON({res: 'play'})}>Play</button>
+				<button id='pauseBtn' onClick={ () => handleJSON({res: 'pause'})}>Pause</button>
+				<button id='muteBtn' onClick={ () => handleJSON({res: 'mute'})}>Mute</button>
+				<button id='unmuteBtn' onClick={ () => handleJSON({res: 'unmute'})}>Unmute</button>
+				<input id='setVolumeInput' type='number' min='0' max='100' placeholder='volume' onChange={() => handleJSON({res: 'setVolume', volume: document.getElementById('setVolumeInput').value})}/>
 			</header>
 		</div>;
 	}

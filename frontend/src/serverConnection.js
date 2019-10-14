@@ -12,7 +12,7 @@ export const MESSAGE_TYPE = {
 };
 
 /** @param {Object} data */
-function handleJSON(data) {
+export function handleJSON(data) {
 	console.log('data', data);
 	
 	switch (data.res) {
@@ -27,6 +27,21 @@ function handleJSON(data) {
 			else {
 				console.error('Problem with requesting song, no video_id or title provided')
 			}
+			break;
+		case 'play':
+			eventEmitter.emit('play');
+			break;
+		case 'pause':
+			eventEmitter.emit('pause');
+			break;
+		case 'mute':
+			eventEmitter.emit('mute');
+			break;
+		case 'unmute':
+			eventEmitter.emit('unmute');
+			break;
+		case 'setVolume':
+			eventEmitter.emit('setVolume', data.volume);
 			break;
 		default:
 			console.warn('Unknown server message');
