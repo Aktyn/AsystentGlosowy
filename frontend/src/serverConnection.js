@@ -13,11 +13,13 @@ export const MESSAGE_TYPE = {
 
 /** @param {Object} data */
 export function handleJSON(data) {
-	console.log('data', data);
+	if(data.res !== 'ignored')
+		console.log('data', data);
 	
 	switch (data.res) {
 		case 'executed':
 			SpeechModule.ignoreIndex(data.index);
+			eventEmitter.emit('executed', data.index);
 			break;
 		case 'ignored': break;
 		case 'request_song':
