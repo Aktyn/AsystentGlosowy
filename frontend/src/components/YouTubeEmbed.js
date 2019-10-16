@@ -12,60 +12,58 @@ export default class YouTubeEmbed extends React.Component {
         }
     };
 
+    /** @type {any} */
+    e = null;
+
+    playEventListener = this._playVideo.bind(this);
+    pauseEventListener = this._pauseVideo.bind(this);
+    muteEventListener = this._muteVideo.bind(this);
+    unmuteEventListener = this._unmuteVideo.bind(this);
+    setVolumeEventListener = this._setVolume.bind(this);
+
     componentDidMount() {
-        eventEmitter.on('play', () => {
-            YouTubeEmbed.playVideo(this.e)
-        });
-
-        eventEmitter.on('pause', () => {
-            YouTubeEmbed.pauseVideo(this.e)
-        });
-
-        eventEmitter.on('mute', () => {
-            YouTubeEmbed.muteVideo(this.e)
-        });
-
-        eventEmitter.on('unmute', () => {
-            YouTubeEmbed.unmuteVideo(this.e)
-        });
-
-        eventEmitter.on('setVolume', (volume) => {
-            YouTubeEmbed.setVolume(this.e, volume)
-        });
+        eventEmitter.on('play', this.playEventListener);
+        eventEmitter.on('pause', this.pauseEventListener);
+        eventEmitter.on('mute', this.muteEventListener);
+        eventEmitter.on('unmute', this.unmuteEventListener);
+        eventEmitter.on('setVolume', this.setVolumeEventListener);
     }
 
-    render() {
-        return (
-            <YouTube
-                videoId={this.props.videoId}
-                opts={this.options}
-                onReady={e => this.e = e}
-            />
-        );
+    componentWillUnmount() {
+        eventEmitter.off('play', this.playEventListener);
+        eventEmitter.off('pause', this.pauseEventListener);
+        eventEmitter.off('mute', this.muteEventListener);
+        eventEmitter.off('unmute', this.unmuteEventListener);
+        eventEmitter.off('setVolume', this.setVolumeEventListener);
     }
 
     // Control the video player using these functions
-    static pauseVideo(event) {
-        event.target.pauseVideo();
+    _pauseVideo() {
+        this.e.target.pauseVideo();
         console.log('Pausing the video')
     }
 
-    static playVideo(event) {
-        event.target.playVideo();
+    _playVideo() {
+        this.e.target.playVideo();
         console.log('Resuming the video')
     }
 
-    static muteVideo(event) {
-        event.target.mute();
+    _muteVideo() {
+        this.e.target.mute();
         console.log('Muting the video')
     }
 
-    static unmuteVideo(event) {
-        event.target.unMute();
+    _unmuteVideo() {
+        this.e.target.unMute();
         console.log('Muting the video')
     }
 
-    static setVolume(event, volume) {
-        event.target.setVolume(volume)
+    _setVolume(volume) {
+        this.e.target.setVolume(volume)
+    }
+
+    render() {
+        return <YouTube videoId={this.props.videoId} opts={this.options} 
+            onReady={e => this.e = e} />;
     }
 }

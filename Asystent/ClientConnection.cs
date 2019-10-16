@@ -18,6 +18,11 @@ namespace Asystent {
             Run();
         }
 
+        ~ClientConnection() {
+            Console.WriteLine("Closing WebSocket server");
+            _wsServer.Dispose();
+        }
+
         private void Run()
         {
             _wsServer.RestartAfterListenError = true;
