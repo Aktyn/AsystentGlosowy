@@ -1,7 +1,7 @@
 import React from 'react';
 import YouTube from "react-youtube";
 
-import {eventEmitter} from "../serverConnection";
+import {sendCommand, eventEmitter, MESSAGE_TYPE} from "../serverConnection";
 
 export default class YouTubeEmbed extends React.Component {
     options = {
@@ -37,6 +37,13 @@ export default class YouTubeEmbed extends React.Component {
         eventEmitter.off('setVolume', this.setVolumeEventListener);
     }
 
+    _onVideoFinished() {
+        sendCommand({
+			type: MESSAGE_TYPE.video_finished,
+			video_id: this.props.videoId
+		});
+    }
+
     // Control the video player using these functions
     _pauseVideo() {
         this.e.target.pauseVideo();
@@ -64,6 +71,6 @@ export default class YouTubeEmbed extends React.Component {
 
     render() {
         return <YouTube videoId={this.props.videoId} opts={this.options} 
-            onReady={e => this.e = e} />;
+            onReady={e => this.e = e} onEnd={this._onVideoFinished.bind(this)} />;
     }
 }

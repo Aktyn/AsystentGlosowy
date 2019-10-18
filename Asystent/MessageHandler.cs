@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 
 namespace Asystent {
 	internal enum MessageType {
-		SpeechResult = 1
+		SpeechResult = 1,
+		VideoFinished = 2
 	}
 
 	public class MessageHandler {
@@ -62,20 +63,20 @@ namespace Asystent {
 			return _procedure;
 		}
 
-		private static SpeechResponse HandleSpeechResult(List<SpeechResult> results, ulong index, 
+		private static SpeechResponse HandleSpeechResult(SpeechMessageSchema data, 
 			IWebSocketConnection clientConn) 
 		{
 			if( _handler != null )
-				_handler.Update(results, index);
+				_handler.Update(data.results, data.result_index);
 			else
-				_handler = new MessageHandler(results, index);
+				_handler = new MessageHandler(data.results, data.result_index);
 
 			if (!_handler.Execute(clientConn)) return new SpeechResponse {res = "ignored"};
 			
 			ProcedureBase procedure = _handler.GetProcedure();
 			if (procedure == null)
 				_handler = null;
-			return new SpeechResponse{res = "executed", index = index};
+			return new SpeechResponse{res = "executed", index = data.result_index};
 		}
 		
 		public static void OnMessage(string message, IWebSocketConnection clientConn) {
@@ -84,13 +85,19 @@ namespace Asystent {
 			//"{"type":0,"results":[{"result":"zagraj costam","confidence":0.618,"type":2}],"result_index":0}"
 
 			try {
-				//var data = JObject.Parse(message);
-				MessageSchema data = JsonConvert.DeserializeObject<MessageSchema>(message);
+				object data = JsonConvert.DeserializeObject<MessageSchema>(message);
 				object response = null;
 
-				switch ((MessageType) data.type) {
+				switch ((MessageType) ((MessageSchema)data).type) {
 					case MessageType.SpeechResult:
-						response = HandleSpeechResult(data.results, data.result_index, clientConn);
+						response = HandleSpeechResult(
+							JsonConvert.DeserializeObject<SpeechMessageSchema>(message),
+							clientConn
+						);
+						break;
+					case MessageType.VideoFinished:
+						Console.WriteLine("Finished video: " + JsonConvert.DeserializeObject<VideoFinishedMessageSchema>(message).video_id);
+						//TODO: update playlist state
 						break;
 					default:
 						Console.WriteLine("Incorrect message format");

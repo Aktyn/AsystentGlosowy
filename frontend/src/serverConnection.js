@@ -8,7 +8,8 @@ let socket;
 let connected = false;//TODO: emitting connection change events
 
 export const MESSAGE_TYPE = {
-	speech_result: 1
+	speech_result: 1,
+	video_finished: 2
 };
 
 /** @param {Object} data */

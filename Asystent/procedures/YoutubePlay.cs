@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Asystent.common;
 
@@ -29,12 +28,12 @@ namespace Asystent.procedures {
 			results.Sort((res1, res2) => res1.confidence > res2.confidence ? 0 : 1);
 			
 			foreach (var res in results) {
-				//Console.WriteLine("{0} {1} ({2})", res.result, res.confidence, match.Groups.Count);
 				if (regex.IsMatch(res.result)) {
 					var match = regex.Match(res.result);
 					if (match.Success && match.Groups.Count > 0) {
-						//Console.WriteLine("Song query: " + match.Groups[3].Value);
-						VideoInfo video = YouTube.Instance().SearchVideo(match.Groups.Last().Value);
+						var user_query = match.Groups[match.Groups.Count-1].Value;
+						
+						VideoInfo video = YouTube.Instance().SearchVideo( user_query );
 						SendData( new SongRequestSchema {
 							res = "request_song", 
 							video_id = video.id, 

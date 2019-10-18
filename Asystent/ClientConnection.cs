@@ -26,23 +26,29 @@ namespace Asystent {
         private void Run()
         {
             _wsServer.RestartAfterListenError = true;
-            _wsServer.Start((socket) =>
-            {
-                socket.OnOpen = () =>
+            try {
+                _wsServer.Start((socket) =>
                 {
-                    Console.WriteLine("Client connected");
-                    _connections.Add(socket);
-                };
-                socket.OnClose = () =>
-                {
-                    Console.WriteLine("Client disconnected");
-                    _connections.Remove(socket);
-                };
-                socket.OnMessage = (message) => {
-                    OnMessage?.Invoke(message, socket);
-                    //socket.Send(message);
-                };
-            });
+                    socket.OnOpen = () =>
+                    {
+                        Console.WriteLine("Client connected");
+                        _connections.Add(socket);
+                    };
+                    socket.OnClose = () =>
+                    {
+                        Console.WriteLine("Client disconnected");
+                        _connections.Remove(socket);
+                    };
+                    socket.OnMessage = (message) => {
+                        OnMessage?.Invoke(message, socket);
+                        //socket.Send(message);
+                    };
+                });
+            }
+            catch(Exception e) {
+                Console.WriteLine("Cannot start WebSocketServer.\n\tReason: " + e.Message);
+                //TODO: try again after some delay
+            }
             
             Console.WriteLine("Server listens for websocket connections at: " + SOCKET_URL);
         }

@@ -10,12 +10,14 @@ export default class App extends React.Component {
 	/** @type {HTMLDivElement | null} */
 	sentencesListDiv = null;
 	sentencesCount = 0;
+	testCommandIndex = 0;
 
 	//listeners
 	songRequestListener = this._onSongRequested.bind(this);
 	commandExecutedListener = this._onCommandExecuted.bind(this);
 
 	state = {
+		/** @type {string | null} */
 		videoId: null,
 		title: null,
 		/** @type {{index: number, confidence: number, content: string, executed: boolean}[]} */
@@ -112,52 +114,27 @@ export default class App extends React.Component {
 		});
 	}
 
+	/** @param {string} msg */
+	_fakeSpokenMessage(msg) {
+		this._onSpeechResults([{
+			result: msg,
+			confidence: 1.0,
+			type: RESULT_TYPE.FINAL
+		}], this.testCommandIndex++);
+	}
+
 	/** @param {React.KeyboardEvent<HTMLInputElement>} e */
 	onCommandKeyDown(e) {
 		if (e.key === 'Enter') {
 			switch(e.target.value) {
 				default:
-					sendCommand(e.target.value);
+					this._fakeSpokenMessage(e.target.value);
 					break;
 				case 'test1':
-					sendCommand({
-						type: MESSAGE_TYPE.speech_result,//test speech results (some predefined code)
-						results: [
-							{
-								result: 'przykładowa komenda costam',//example command
-								confidence: 0.618,
-								type: RESULT_TYPE.FINAL
-							},
-							{
-								result: 'przykładowe polecenie',//example command
-								confidence: 0.95,
-								type: RESULT_TYPE.ALTERNATIVE
-							},
-						],
-						result_index: 2
-					});
+					this._fakeSpokenMessage('przykładowa komenda i przykładowe dane');
 					break;
 				case 'test2':
-					sendCommand({
-						type: MESSAGE_TYPE.speech_result,
-						results: [{
-							result: 'zagraj piosenkę explosion majlo club',
-							confidence: 0.700,
-							type: RESULT_TYPE.FINAL
-						}],
-						result_index: 3
-					});
-					break;
-				case 'test3':
-					sendCommand({
-						type: MESSAGE_TYPE.speech_result,
-						results: [{
-							result: 'zagraj piosenkę tiesto adagio for strings',
-							confidence: 0.700,
-							type: RESULT_TYPE.FINAL
-						}],
-						result_index: 4
-					});
+					this._fakeSpokenMessage('zagraj piosenkę explosion majlo club');
 					break;
 			}
 			
@@ -176,13 +153,13 @@ export default class App extends React.Component {
 	render() {
 		return <div className="App">
 			<section>
+				{this.state.videoId && this.state.title && 
+					<YouTubeEmbed videoId={this.state.videoId} />}
 				<Microphone/>
 				<p>
 					<input type="text" placeholder="Example command" 
 						onKeyDown={this.onCommandKeyDown.bind(this)}/>
 				</p>
-				{this.state.videoId && this.state.title && 
-					<YouTubeEmbed videoId={this.state.videoId} />}
 				<div className='sentences' ref={el => this.sentencesListDiv = el}>{
 					this.renderRecognizeSentences()
 				}</div>
