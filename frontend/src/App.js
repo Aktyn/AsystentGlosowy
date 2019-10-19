@@ -91,7 +91,7 @@ export default class App extends React.Component {
 
 		let sentences = this.state.sentences;
 		let last_sentence = sentences.length > 0 ? sentences[sentences.length-1] : null;
-		if(!last_sentence || last_sentence.index < result_index) {
+		if(!last_sentence || last_sentence.index !== result_index) {
 			sentences.push({
 				index: result_index,
 				confidence: most_confident_result.confidence,
@@ -137,6 +137,8 @@ export default class App extends React.Component {
 					this._fakeSpokenMessage('zagraj piosenkę explosion majlo club');
 					break;
 			}
+
+			//TODO: history system of commands
 			
 			e.target.value = '';
 		}

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-// ReSharper disable InconsistentNaming
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Asystent.common {
 	/** MESSAGES FROM CLIENT **/

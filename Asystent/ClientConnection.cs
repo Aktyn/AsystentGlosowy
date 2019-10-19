@@ -4,18 +4,22 @@ using System.Collections.Generic;
 
 namespace Asystent {
     public delegate void MessageListener(string message, IWebSocketConnection clientConn);
+    public delegate void ServerStartListener();
     
     public class ClientConnection {
         private static string SOCKET_URL = "ws://127.0.0.1:7000";
         private readonly WebSocketServer _wsServer = new WebSocketServer(SOCKET_URL);
         private readonly List<IWebSocketConnection> _connections = new List<IWebSocketConnection>();
+
+        private bool running = false;
         
         public event MessageListener OnMessage;
+        public event ServerStartListener OnServerStart;
 
         public ClientConnection() {
             FleckLog.Level = LogLevel.Error;
             
-            Run();
+            _wsServer.RestartAfterListenError = true;
         }
 
         ~ClientConnection() {
@@ -23,34 +27,38 @@ namespace Asystent {
             _wsServer.Dispose();
         }
 
-        private void Run()
-        {
-            _wsServer.RestartAfterListenError = true;
+        public void Connect() {
+            if(running) {
+                Console.WriteLine("WebSocketServer already running");
+                return;
+            }
             try {
-                _wsServer.Start((socket) =>
-                {
-                    socket.OnOpen = () =>
-                    {
+                _wsServer.Start((socket) => {
+                    socket.OnOpen = () => {
                         Console.WriteLine("Client connected");
                         _connections.Add(socket);
                     };
-                    socket.OnClose = () =>
-                    {
+                    socket.OnClose = () => {
                         Console.WriteLine("Client disconnected");
                         _connections.Remove(socket);
                     };
                     socket.OnMessage = (message) => {
                         OnMessage?.Invoke(message, socket);
-                        //socket.Send(message);
                     };
                 });
+
+                Console.WriteLine("Server listens for websocket connections at: " + SOCKET_URL);
+                running = true;
+                OnServerStart?.Invoke();
             }
             catch(Exception e) {
-                Console.WriteLine("Cannot start WebSocketServer.\n\tReason: " + e.Message);
-                //TODO: try again after some delay
+                Console.WriteLine("Cannot start WebSocketServer.\n\tReason: " + e.Message +
+                    "\n\tTrying again in 10 seconds");
+                
+                Utils.setTimeout(() => {
+                    Connect();
+                }, 10 * 1000);
             }
-            
-            Console.WriteLine("Server listens for websocket connections at: " + SOCKET_URL);
         }
 
         public void DistributeMessage(string msg) {

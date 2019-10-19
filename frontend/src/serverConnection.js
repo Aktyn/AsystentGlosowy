@@ -7,6 +7,9 @@ const SERVER_URL = "ws://localhost:7000";
 let socket;
 let connected = false;//TODO: emitting connection change events
 
+const url = new URL(window.location.href);
+const closeWithServer = url.searchParams.get('closeWithServer') === 'true';
+
 export const MESSAGE_TYPE = {
 	speech_result: 1,
 	video_finished: 2
@@ -62,6 +65,11 @@ function connect() {
 	
 	socket.onclose = function (e) {
 		console.log("DISCONNECTED");
+		if(connected && closeWithServer) {
+			console.log('Closing expired session');
+			window.close();
+			return;
+		}
 		connected = false;
 		setTimeout(reconnect, 5000);
 	};
@@ -73,7 +81,9 @@ function connect() {
 			let json = JSON.parse(e.data);
 			handleJSON(json);
 		}
-		catch(e) {}
+		catch(err) {
+			console.error('Incorrect message from server: ' + e.data);
+		}
 	};
 	
 	/*socket.onerror = function(e) {

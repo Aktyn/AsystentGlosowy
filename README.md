@@ -12,16 +12,22 @@
 </div>
 
 #### Uruchamianie
-<div>---</div>
-
-#### TODO
-<!-- przykład przekreślonego tekstu: <s>tekst</s> -->
 <ul>
-    <li>Odtwarzanie wideo w oknie przeglądarki</li>
-    <li>Wyświetlanie w czasie rzeczywistym wyników rozpoznawania mowy</li>
-    <li>Procedury pozwalające na zatrzymywanie, wznawianie, pomijanie odtwarzania filmu</li>
-    <li>System playlisty i procedura dodająca utwór do playlisty</li>
-    <li>Procedury pozwalające na zmianę głośności odtwarzanych filmów</li>
-    <li>Wyczyszczenie repozytorium z niepotrzebnych plików i folderów projektu .NET</li>
-    <li>Funkcjonalność uruchamiająca aplikację webową w osobnym oknie przeglądarki Chrome</li>
+    <li>
+        <h5>Backend (polecenia wykonujemy z poziomu folderu <i>Asystent</i>)</h5>
+        <i>Do poprawnego działania projektu wymagany jest klucz YouTube Data API v3. Można go wygenerować na <a href="https://console.cloud.google.com">https://console.cloud.google.com</a>.</i><br/><br/>
+        <label>Tryb developerski:</label>
+        <pre>dotnet watch run &ltYOUTUBE_API_KEY&gt</pre>
+        <label>Skompilowanie projektu:</label>
+        <pre>dotnet publish -c Release -r win-x64 --self-contained true</pre>
+    </li>
+    <li>
+        <h5>Frontend (polecenia wykonujemy z poziomu folderu <i>frontend</i>)</h5>
+        <label>Na początku należy pobrać i zainstalować zależności/paczki niezbędne do działania projektu</label>
+        <pre>npm install</pre>
+        <label>Tryb developerski:</label>
+        <pre>npm run start</pre>
+        <label>Skompilowanie projektu:</label>
+        <pre>npm run build</pre>
+    </li>
 </ul>

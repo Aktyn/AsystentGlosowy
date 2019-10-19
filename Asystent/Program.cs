@@ -2,41 +2,56 @@
 
 namespace Asystent {
 	class Program {
-		private static void Main(string[] args) {
-			string appName, youtubeApiKey;
+		//TODO: create list of available commands in welcome message
+		private static string WelcomeMessage = "Example welcome message\n\tTODO - short help";
 
-			if (args.Length < 2) {
-				Console.WriteLine("Program should be executed with ApplicationName and YoutubeApiKey arguments");
+		private static void Main(string[] args) {
+			string youtubeApiKey;
+
+			if (args.Length < 1) {
+				Console.WriteLine("Program should be executed with YoutubeApiKey argument");
 				Console.WriteLine("For egzample: program.exe VoiceAssistant qRzagddeDk51337RakJDN2g59oADkhtQnycn");
 				
 				//requesting arguments from console input
-				Console.Write("ApplicationName: ");
-				appName = Console.ReadLine();
 				Console.Write("YoutubeApiKey: ");
 				youtubeApiKey = Console.ReadLine();
 			}
 			else {
-				appName = args[0];
-				youtubeApiKey = args[1];
+				youtubeApiKey = args[0];
 			}
 
+			//Establishing WebSocket connections
 			var connection = new ClientConnection();
 			connection.OnMessage += MessageHandler.OnMessage;
+			connection.OnServerStart += () => {
+				//#if !DEBUG
+				ChromeOpener.OpenInStandaloneWindow();
+				//#endif
+			};
 
+			connection.Connect();
+
+			//Initializing YouTube API
 			try {
-				YouTube.Instance().Init(appName, youtubeApiKey);
+				YouTube.Instance().Init("VoiceAssistant", youtubeApiKey);
 				Console.WriteLine("YouTube Api initialized");
 			}
 			catch (Exception) {
 				Console.WriteLine("Cannot initialize YouTube API");
 			}
 
-			//keep console alive and allow sending custom commands to frontend app
-			var input = Console.ReadLine();
-			while (input != "exit") {
-				connection.DistributeMessage(input);
-				input = Console.ReadLine();
-			}
+			Console.WriteLine("\n" + WelcomeMessage);
+			do {//keep console alive and allow sending custom commands to frontend app
+				var command = Console.ReadLine();
+
+				switch(command) {
+					default:
+						connection.DistributeMessage(command);
+						break;
+					case "exit":
+						return;
+				}
+			} while(true);
 		}
 	}
 }
