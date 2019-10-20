@@ -5,7 +5,7 @@ using System.IO;
 namespace Asystent {
     public class ChromeOpener {
         //private static string os_cmd = isLinux() ? "sh" : "cmd.exe";
-        private static string chrome_command = isLinux() ? "google-chrome" : "start chrome";
+        private static string chrome_command = isLinux() ? "google-chrome" : "cmd.exe";
 
         private static bool isLinux() {
             return Environment.OSVersion.Platform == PlatformID.Unix;
@@ -18,6 +18,8 @@ namespace Asystent {
                 if( !File.Exists(indexHTML) )
                     throw new Exception("index.html not found");
                 string arguments = $"--app=\"file://{indexHTML}?closeWithServer=true\" --chrome-frame";
+                if( !isLinux() )
+                    arguments = "/C start chrome " + arguments;
                 Console.WriteLine("Executing command: " + chrome_command + " " + arguments);
 
                 //Create process
