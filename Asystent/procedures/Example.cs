@@ -30,11 +30,10 @@ namespace Asystent.procedures {
 						example_data = match.Groups[match.Groups.Count-1].Value;
 					}
 					Console.WriteLine("Executing example command with given data: \"" + example_data + '"');
-					break;
+					Finished = true;
+					return;
 				}
 			}
-
-			Finished = true;
 		}
 	}
 }

@@ -25,7 +25,9 @@ export function handleJSON(data) {
 			SpeechModule.ignoreIndex(data.index);
 			eventEmitter.emit('executed', data.index);
 			break;
-		case 'ignored': break;
+		case 'ignored':
+			eventEmitter.emit('ignored', data.procedure);
+			break;
 		case 'request_song':
 			if(data.video_id && data.title) {
 				eventEmitter.emit('songRequested', data.video_id, data.title);

@@ -39,12 +39,11 @@ namespace Asystent.procedures {
 							video_id = video.id, 
 							title = video.title
 						} );
-						break;
+						Finished = true;
+						return;
 					}
 				}
 			}
-
-			Finished = true;
 		}
 	}
 }

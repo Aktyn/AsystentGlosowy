@@ -10,11 +10,11 @@ export default class App extends React.Component {
 	/** @type {HTMLDivElement | null} */
 	sentencesListDiv = null;
 	sentencesCount = 0;
-	testCommandIndex = 0;
 
 	//listeners
 	songRequestListener = this._onSongRequested.bind(this);
 	commandExecutedListener = this._onCommandExecuted.bind(this);
+	commandIgnoredListener = this._onCommandIgnored.bind(this);
 
 	state = {
 		/** @type {string | null} */
@@ -22,6 +22,10 @@ export default class App extends React.Component {
 		title: null,
 		/** @type {{index: number, confidence: number, content: string, executed: boolean}[]} */
 		sentences: [],
+		debugInterimResults: false,
+		testCommandIndex: 0,
+		/** @type {string | null} */
+		activeProcedureName: null
 	};
 	
 	componentDidMount() {
@@ -36,11 +40,13 @@ export default class App extends React.Component {
 		// Listening to events
 		eventEmitter.on('songRequested', this.songRequestListener);
 		eventEmitter.on('executed', this.commandExecutedListener);
+		eventEmitter.on('ignored', this.commandIgnoredListener);
 	}
 
 	componentWillUnmount() {
 		eventEmitter.off('songRequested', this.songRequestListener);
 		eventEmitter.off('executed', this.commandExecutedListener);
+		eventEmitter.off('ignored', this.commandIgnoredListener);
 	}
 
 	componentDidUpdate(_prevProps, prevState) {
@@ -72,7 +78,11 @@ export default class App extends React.Component {
 			if(sentences[i].index === index)
 				sentences[i].executed = true;
 		}
-		this.setState({sentences});
+		this.setState({sentences, activeProcedureName: null});
+	}
+
+	_onCommandIgnored(procedureName) {
+		this.setState({activeProcedureName: procedureName});
 	}
 	
 	/**
@@ -119,8 +129,10 @@ export default class App extends React.Component {
 		this._onSpeechResults([{
 			result: msg,
 			confidence: 1.0,
-			type: RESULT_TYPE.FINAL
-		}], this.testCommandIndex++);
+			type: this.state.debugInterimResults ? 
+				RESULT_TYPE.INTERIM : RESULT_TYPE.FINAL
+		}], this.state.testCommandIndex);
+		this.setState({testCommandIndex: this.state.testCommandIndex+1});
 	}
 
 	/** @param {React.KeyboardEvent<HTMLInputElement>} e */
@@ -145,8 +157,8 @@ export default class App extends React.Component {
 	}
 
 	renderRecognizeSentences() {
-		return this.state.sentences.map(sentence => (
-			<div key={sentence.index} className={sentence.executed ? 'executed' : ''}>
+		return this.state.sentences.map((sentence, index) => (
+			<div key={index} className={sentence.executed ? 'executed' : ''}>
 				{sentence.content}
 			</div>
 		));
@@ -158,12 +170,25 @@ export default class App extends React.Component {
 				{this.state.videoId && this.state.title && 
 					<YouTubeEmbed videoId={this.state.videoId} />}
 				<Microphone/>
-				<p>
+				<p style={{display: 'inline-flex', alignItems: 'center'}}>
 					<input type="text" placeholder="Example command" 
 						onKeyDown={this.onCommandKeyDown.bind(this)}/>
+					<input type="checkbox" onChange={e => {
+						this.setState({debugInterimResults: e.target.checked});
+					}} checked={this.state.debugInterimResults} />
+					<input type="number" onChange={e => {
+						this.setState({
+							testCommandIndex: parseInt(e.target.value)
+						});
+					}} value={this.state.testCommandIndex} style={{
+						width: '50px'
+					}} />
 				</p>
 				<div className='sentences' ref={el => this.sentencesListDiv = el}>{
 					this.renderRecognizeSentences()
+				}</div>
+				<div>{this.state.activeProcedureName && 
+					<span>Active procedure: {this.state.activeProcedureName}</span>
 				}</div>
 				<p style={{
 					display: 'inline-grid', 
@@ -181,6 +206,11 @@ export default class App extends React.Component {
 							volume: document.getElementById('setVolumeInput').value
 						});
 					}}/>
+					<button onClick={() => {
+						this.setState({testCommandIndex: 0});
+						SpeechModule.init();
+						SpeechModule.start();
+					}}>Reset speech module</button>
 				</p>
 			</section>
 		</div>;

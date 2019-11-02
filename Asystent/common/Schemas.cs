@@ -23,9 +23,10 @@ namespace Asystent.common {
 	}
 
 	/** RESPONSES TO CLIENT **/
-
+	
 	public struct SpeechResponse {
 		public string res { get; set; }
 		public ulong index { get; set; }
+		public string procedure { get; set; }
 	}
 }

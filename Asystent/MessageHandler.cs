@@ -16,7 +16,7 @@ namespace Asystent {
 		private static MessageHandler _handler;
 
 		private List<SpeechResult> _results;
-		private readonly ulong _index;
+		private ulong _index;
 		private ProcedureBase _procedure;
 
 		private MessageHandler(List<SpeechResult> results, ulong index) {
@@ -25,22 +25,21 @@ namespace Asystent {
 		}
 
 		private void Update(List<SpeechResult> updatedResults, ulong index) {
-			if( _index != index )
+			if( _index != index ) {
+				_index = index;
 				_procedure = null;//DISCARD PROCEDURE
+			}
 			_results = updatedResults;
 		}
 
 		private bool Execute(IWebSocketConnection clientConn) {
-			if( _procedure != null ) {
-				_procedure.Update(_results);
-			}
-			else {
+			if( _procedure == null ) {
 				var matchingProcedures = ProcedureBase.MatchProcedures(_results);
 			
 				if (matchingProcedures.Count < 1)//no procedure matches result
 					return false;
 			
-				//console.log(matching_procedures);
+				//Console.WriteLine(matchingProcedures.Count);
 			
 				if (matchingProcedures.Count > 1) {
 					Console.WriteLine("More than one procedure has been matched in single result");
@@ -52,9 +51,9 @@ namespace Asystent {
 				_procedure.OnSendData += data => {
 					clientConn.Send(JsonConvert.SerializeObject(data));
 				};
-				
-				_procedure.Update(_results);
 			}
+
+			_procedure.Update(_results);
 		
 			return _procedure.IsFinished();
 		}
@@ -71,18 +70,26 @@ namespace Asystent {
 			else
 				_handler = new MessageHandler(data.results, data.result_index);
 
-			if (!_handler.Execute(clientConn)) return new SpeechResponse {res = "ignored"};
-			
+			bool executed = _handler.Execute(clientConn);
 			ProcedureBase procedure = _handler.GetProcedure();
+
+			if (!executed) {
+				var resp = new SpeechResponse {res = "ignored"};
+				if(procedure != null)
+					resp.procedure = procedure.GetType().Name;
+				return resp;
+			}
+			
 			if (procedure == null)
 				_handler = null;
+			Console.WriteLine("Command executed, sending response to client");
 			return new SpeechResponse{res = "executed", index = data.result_index};
 		}
 		
 		public static void OnMessage(string message, IWebSocketConnection clientConn) {
 			Console.WriteLine("Message: " + message);
 			//example message:
-			//"{"type":0,"results":[{"result":"zagraj costam","confidence":0.618,"type":2}],"result_index":0}"
+			//"{"type":1,"results":[{"result":"zagraj costam","confidence":0.618,"type":2}],"result_index":0}"
 
 			try {
 				object data = JsonConvert.DeserializeObject<MessageSchema>(message);

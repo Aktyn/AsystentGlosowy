@@ -26,7 +26,7 @@
         <label>Na początku należy pobrać i zainstalować zależności/paczki niezbędne do działania projektu</label>
         <pre>npm install</pre>
         <label>Tryb developerski:</label>
-        <pre>npm run start</pre>
+        <pre>npm start</pre>
         <label>Skompilowanie projektu:</label>
         <pre>npm run build</pre>
     </li>

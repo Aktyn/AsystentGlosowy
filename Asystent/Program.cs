@@ -24,9 +24,9 @@ namespace Asystent {
 			var connection = new ClientConnection();
 			connection.OnMessage += MessageHandler.OnMessage;
 			connection.OnServerStart += () => {
-				//#if !DEBUG
+				#if !DEBUG
 				ChromeOpener.OpenInStandaloneWindow();
-				//#endif
+				#endif
 			};
 
 			connection.Connect();

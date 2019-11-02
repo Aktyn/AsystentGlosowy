@@ -26,7 +26,7 @@ export default class Microphone extends React.Component {
 
     render() {
         return (
-            <img src={this.state.currentImage} alt="microphone on" onClick={this.clickHandler}/>
+            <img src={this.state.currentImage} alt="microphone on" onClick={this.clickHandler} style={{display: 'block', margin: 'auto'}}/>
         )
     }
 }
