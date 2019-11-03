@@ -14,7 +14,8 @@ namespace Asystent.procedures {
 	public delegate void SendDataListener(object data);
 
 	public abstract class ProcedureBase {
-		private static Type[] procedures = { typeof(Example), typeof(YoutubePlay) };
+		private static Type[] procedures = { typeof(Example), typeof(YoutubePlay), typeof(YoutubeVolume), typeof(YoutubeMute),
+		 typeof(VolumeUnmute), typeof(YoutubeIncVolume), typeof(YoutubeDecVolume) };
 		//public static Regex regex = null;
 
 		protected List<SpeechResult> Results;
