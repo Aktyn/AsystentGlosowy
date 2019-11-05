@@ -51,6 +51,12 @@ export function handleJSON(data) {
 		case 'setVolume':
 			eventEmitter.emit('setVolume', data.volume);
 			break;
+		case 'volume_down':
+			eventEmitter.emit('changeVolume', -parseInt(data.volume||5));
+			break;
+		case 'volume_up':
+			eventEmitter.emit('changeVolume', parseInt(data.volume||5));
+			break;
 		default:
 			console.warn('Unknown server message');
 			break;

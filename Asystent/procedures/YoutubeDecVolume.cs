@@ -10,7 +10,7 @@ namespace Asystent.procedures {
 	}
 	public class YoutubeDecVolume : ProcedureBase {
 		public static Regex regex = new Regex(
-			@"(zmniejsz|scisz|ścisz|przyscisz|przyścisz) ?(piosenk[eę]|utw[oó]r)? (.+)",
+			@"(zmniejsz|[sś]cisz|przycisz) ?(g[lł]o[sś]no[sś][cć]|d[zź]wi[eę]k)?",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 			public YoutubeDecVolume() { }
@@ -28,15 +28,14 @@ namespace Asystent.procedures {
 				if (regex.IsMatch(res.result)) {
 					string [] split = res.result.Split(new Char [] {' '});
 					string vol=null;
-					int i =0;
-					while(i<5)
+					
+					for(int i=0; i<split.Length; i++)
 					{
 						if(Regex.IsMatch(split[i], @"^\d+$"))
 						{
 							vol=split[i];
 							break;
 						}
-						i++;
 					}
 					SendData( new DecVolumeSchema {
 							res = "volume_down", 

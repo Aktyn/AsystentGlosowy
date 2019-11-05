@@ -9,7 +9,7 @@ namespace Asystent.procedures {
 	}
 	public class YoutubeMute : ProcedureBase {
 		public static Regex regex = new Regex(
-			@"(wycisz|wylacz|wyłącz) ?(dzwiek|dźwiek|dźwięk)? (.+)",
+			@"(wycisz|wy[lł][aą]cz) ?(d[zź]wi[eę]k)?",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 			public YoutubeMute() { }

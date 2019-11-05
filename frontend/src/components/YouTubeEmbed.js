@@ -20,6 +20,7 @@ export default class YouTubeEmbed extends React.Component {
     muteEventListener = this._muteVideo.bind(this);
     unmuteEventListener = this._unmuteVideo.bind(this);
     setVolumeEventListener = this._setVolume.bind(this);
+    changeVolumeEventListener = this._changeVolume.bind(this);
 
     componentDidMount() {
         eventEmitter.on('play', this.playEventListener);
@@ -27,6 +28,7 @@ export default class YouTubeEmbed extends React.Component {
         eventEmitter.on('mute', this.muteEventListener);
         eventEmitter.on('unmute', this.unmuteEventListener);
         eventEmitter.on('setVolume', this.setVolumeEventListener);
+        eventEmitter.on('changeVolume', this.changeVolumeEventListener);
     }
 
     componentWillUnmount() {
@@ -35,6 +37,7 @@ export default class YouTubeEmbed extends React.Component {
         eventEmitter.off('mute', this.muteEventListener);
         eventEmitter.off('unmute', this.unmuteEventListener);
         eventEmitter.off('setVolume', this.setVolumeEventListener);
+        eventEmitter.off('changeVolume', this.changeVolumeEventListener);
     }
 
     _onVideoFinished() {
@@ -47,26 +50,32 @@ export default class YouTubeEmbed extends React.Component {
     // Control the video player using these functions
     _pauseVideo() {
         this.e.target.pauseVideo();
-        console.log('Pausing the video')
+        console.log('Pausing the video');
     }
 
     _playVideo() {
         this.e.target.playVideo();
-        console.log('Resuming the video')
+        console.log('Resuming the video');
     }
 
     _muteVideo() {
         this.e.target.mute();
-        console.log('Muting the video')
+        console.log('Muting the video');
     }
 
     _unmuteVideo() {
         this.e.target.unMute();
-        console.log('Muting the video')
+        console.log('Muting the video');
     }
 
     _setVolume(volume) {
-        this.e.target.setVolume(volume)
+        this.e.target.setVolume(volume);
+    }
+
+    _changeVolume(volume) {
+        let new_volume = this.e.target.getVolume() + volume;
+        this.e.target.setVolume(new_volume);
+        console.log('Volume changed to:', new_volume);
     }
 
     render() {

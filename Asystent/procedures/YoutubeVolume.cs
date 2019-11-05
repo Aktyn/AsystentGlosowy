@@ -10,7 +10,7 @@ namespace Asystent.procedures {
 	}
 	public class YoutubeVolume : ProcedureBase {
 		public static Regex regex = new Regex(
-			@"(ustaw|zmien|zmienić) ?(piosenk[eę]|utw[oó]r)? (.+)",
+			@"(ustaw|zmie[nń]|zmienić) (g[lł]o[sś]no[sś][cć])",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 			public YoutubeVolume() { }
@@ -28,16 +28,15 @@ namespace Asystent.procedures {
 				if (regex.IsMatch(res.result)) {
 					string [] split = res.result.Split(new Char [] {' '});
 					string vol=null;
-					int i =0;
-					while(i<5)
+					for(int i=0; i<split.Length; i++)
 					{
 						if(Regex.IsMatch(split[i], @"^\d+$"))
 						{
 							vol=split[i];
 							break;
 						}
-						i++;
 					}
+					//TODO: send notification to browser when there is no number in received results
 					SendData( new VolumeSetSchema {
 							res = "setVolume", 
 							volume = vol

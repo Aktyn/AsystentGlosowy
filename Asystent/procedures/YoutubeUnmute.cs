@@ -9,7 +9,7 @@ namespace Asystent.procedures {
 	}
 	public class VolumeUnmute : ProcedureBase {
 		public static Regex regex = new Regex(
-			@"(wlacz|włącz) ?(dzwiek|dźwiek|dźwięk)? (.+)",
+			@"(w[lł][aą]cz) ?(d[zź]wi[eę]k)?",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 			public VolumeUnmute() { }
