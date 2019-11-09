@@ -6,6 +6,8 @@ import SpeechModule, {RESULT_TYPE} from './speechModule';
 
 import './App.css';
 
+const logoImg = require('./icons/logo.png');
+
 export default class App extends React.Component {
 	/** @type {HTMLDivElement | null} */
 	sentencesListDiv = null;
@@ -165,11 +167,17 @@ export default class App extends React.Component {
 	}
 	
 	render() {
-		return <div className="App">
-			<section>
-				{this.state.videoId && this.state.title && 
-					<YouTubeEmbed videoId={this.state.videoId} />}
+		return <div className={"layout"}>
+			<nav className="header-panel">
+				<div>TODO - server connection status</div>
 				<Microphone/>
+			</nav>
+			<div className="App">
+				{this.state.videoId && this.state.title ? 
+					<YouTubeEmbed videoId={this.state.videoId} /> :
+					<div>
+						<img src={logoImg} height={256} />
+					</div>}
 				<p style={{display: 'inline-flex', alignItems: 'center'}}>
 					<input type="text" placeholder="Example command" 
 						onKeyDown={this.onCommandKeyDown.bind(this)}/>
@@ -212,7 +220,7 @@ export default class App extends React.Component {
 						SpeechModule.start();
 					}}>Reset speech module</button>
 				</p>
-			</section>
+			</div>
 		</div>;
 	}
 }
