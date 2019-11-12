@@ -66,13 +66,15 @@ export function handleJSON(data) {
 function connect() {
 	socket = new WebSocket(SERVER_URL);
 	
-	socket.onopen = function (e) {
+	socket.onopen = function () {
 		console.log("CONNECTED");
 		connected = true;
+		eventEmitter.emit('serverConnected');
 	};
 	
-	socket.onclose = function (e) {
+	socket.onclose = function () {
 		console.log("DISCONNECTED");
+		eventEmitter.emit('serverDisconnected');
 		if(connected && closeWithServer) {
 			console.log('Closing expired session');
 			window.close();

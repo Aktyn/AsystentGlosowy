@@ -17,6 +17,9 @@ export default class App extends React.Component {
 	songRequestListener = this._onSongRequested.bind(this);
 	commandExecutedListener = this._onCommandExecuted.bind(this);
 	commandIgnoredListener = this._onCommandIgnored.bind(this);
+	serverConnectedListener = this._onServerConnected.bind(this);
+	serverDisconnectedListener = this._onServerDisconnected.bind(this);
+
 
 	state = {
 		/** @type {string | null} */
@@ -27,12 +30,14 @@ export default class App extends React.Component {
 		debugInterimResults: false,
 		testCommandIndex: 0,
 		/** @type {string | null} */
-		activeProcedureName: null
+		activeProcedureName: null,
+		serverConnected: false,
+		micIsOn: false,
 	};
 	
 	componentDidMount() {
-		SpeechModule.onstart = this._onSpeechStarted.bind(this);
-		SpeechModule.onend = this._onSpeechEnded.bind(this);
+		SpeechModule.onstart = App._onSpeechStarted.bind(this);
+		SpeechModule.onend = App._onSpeechEnded.bind(this);
 		SpeechModule.onresult = this._onSpeechResults.bind(this);
 	
 		SpeechModule.init();
@@ -43,12 +48,18 @@ export default class App extends React.Component {
 		eventEmitter.on('songRequested', this.songRequestListener);
 		eventEmitter.on('executed', this.commandExecutedListener);
 		eventEmitter.on('ignored', this.commandIgnoredListener);
+		eventEmitter.on('serverConnected', this.serverConnectedListener);
+		eventEmitter.on('serverDisconnected', this.serverDisconnectedListener);
+
+		this.checkMicrophone();
 	}
 
 	componentWillUnmount() {
 		eventEmitter.off('songRequested', this.songRequestListener);
 		eventEmitter.off('executed', this.commandExecutedListener);
 		eventEmitter.off('ignored', this.commandIgnoredListener);
+		eventEmitter.off('serverConnected', this.serverConnectedListener);
+		eventEmitter.off('serverDisconnected', this.serverDisconnectedListener);
 	}
 
 	componentDidUpdate(_prevProps, prevState) {
@@ -58,11 +69,11 @@ export default class App extends React.Component {
 		}
 	}
 
-	_onSpeechStarted() {
+	static _onSpeechStarted() {
 		console.log('Speech recognition started');
 	}
 	
-	_onSpeechEnded() {
+	static _onSpeechEnded() {
 		console.log('Speech recognition ended');
 	}
 
@@ -86,6 +97,27 @@ export default class App extends React.Component {
 	_onCommandIgnored(procedureName) {
 		this.setState({activeProcedureName: procedureName});
 	}
+
+	_onServerConnected() {
+		this.setState({serverConnected: true});
+	}
+
+	_onServerDisconnected() {
+		this.setState({serverConnected: false});
+	}
+
+	checkMicrophone() {
+		navigator.mediaDevices.getUserMedia({ audio: true }).then(microphone => {
+			if(microphone) {
+				this.setState({micIsOn: true});
+				console.log(microphone);
+			}
+		}).catch(() => {
+			console.error('Microphone not permitted');
+			this.setState({micIsOn: false});
+		});
+	}
+
 	
 	/**
 	 * @param {{
@@ -98,7 +130,7 @@ export default class App extends React.Component {
 	_onSpeechResults(results, result_index) {
 		console.log( results, result_index );
 
-		//descending sorting over confidence valu
+		//descending sorting over confidence value
 		let most_confident_result = results.sort((a,b) => b.confidence - a.confidence)[0];
 
 		let sentences = this.state.sentences;
@@ -169,14 +201,14 @@ export default class App extends React.Component {
 	render() {
 		return <div className={"layout"}>
 			<nav className="header-panel">
-				<div>TODO - server connection status</div>
-				<Microphone/>
+				<div>server {this.state.serverConnected ? <span style={{color: '#00df81'}}>CONNECTED</span> : <span style={{color: 'red'}}>DISCONNECTED</span>}</div>
+				<Microphone micIsOn={this.state.micIsOn}/>
 			</nav>
 			<div className="App">
 				{this.state.videoId && this.state.title ? 
 					<YouTubeEmbed videoId={this.state.videoId} /> :
 					<div>
-						<img src={logoImg} height={256} />
+						<img src={logoImg} height={256} alt="Logo"/>
 					</div>}
 				<p style={{display: 'inline-flex', alignItems: 'center'}}>
 					<input type="text" placeholder="Example command" 
