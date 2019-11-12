@@ -15,7 +15,8 @@ namespace Asystent.procedures {
 
 	public abstract class ProcedureBase {
 		private static Type[] procedures = { typeof(Example), typeof(YoutubePlay), typeof(YoutubeVolume), typeof(YoutubeMute),
-		 typeof(VolumeUnmute), typeof(YoutubeIncVolume), typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume) };
+		 typeof(VolumeUnmute), typeof(YoutubeIncVolume), typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume),
+		 typeof(YoutubePlaylist), typeof(YoutubeNastepny)};
 		//public static Regex regex = null;
 
 		protected List<SpeechResult> Results;
@@ -35,6 +36,8 @@ namespace Asystent.procedures {
 			return Finished;
 		}
 		
+		public static List<PlaylistSchema> playlistMemory = new List<PlaylistSchema>();
+
 		public static List<ProcedureBase> MatchProcedures(List<SpeechResult> results) {
 			List<ProcedureBase> matching = new List<ProcedureBase>();
 
