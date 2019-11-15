@@ -34,20 +34,19 @@ namespace Asystent.procedures
 				if (regex.IsMatch(res.result)) 
                 {
 					var match = regex.Match(res.result);
-					if (match.Success && match.Groups.Count > 0 && procedures.ProcedureBase.playlistMemory.Count > 0) 
+					if (match.Success && match.Groups.Count > 0 && Playlist.playlistMemory.Count > 0) 
                     {
                         SendData( new SongRequestSchemaN {
-							res = procedures.ProcedureBase.playlistMemory[0].res, 
-							video_id = procedures.ProcedureBase.playlistMemory[0].video_id, 
-							title = procedures.ProcedureBase.playlistMemory[0].title
+							res = Playlist.playlistMemory[0].res, 
+							video_id = Playlist.playlistMemory[0].video_id, 
+							title = Playlist.playlistMemory[0].title
 						} );
 
-                        procedures.ProcedureBase.playlistMemory.RemoveAt(0);
+                        if(Playlist.playlistMemory.Count > 1)
+                        {
+                            Playlist.skip();
+                        }
 						return;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Pusta kolejka.");
                     }
                 }
             }

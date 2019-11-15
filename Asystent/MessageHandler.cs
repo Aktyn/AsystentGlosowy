@@ -105,8 +105,16 @@ namespace Asystent {
 					case MessageType.VideoFinished:
 						Console.WriteLine("Finished video: " + JsonConvert.DeserializeObject<VideoFinishedMessageSchema>(message).video_id);
 						//TODO: update playlist state
-						clientConn.Send(JsonConvert.SerializeObject(procedures.ProcedureBase.playlistMemory[0]));
-						procedures.ProcedureBase.playlistMemory.RemoveAt(0);
+						if(Playlist.playlistMemory.Count != 0)
+						{
+							clientConn.Send(JsonConvert.SerializeObject(Playlist.playlistMemory[0]));
+							Playlist.skip();
+							break;
+						}
+						else
+						{
+							Console.WriteLine("Pusta kolejka. <MessengeHelper>");
+						}
 						break;
 					default:
 						Console.WriteLine("Incorrect message format");

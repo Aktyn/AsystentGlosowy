@@ -36,8 +36,6 @@ namespace Asystent.procedures {
 			return Finished;
 		}
 		
-		public static List<PlaylistSchema> playlistMemory = new List<PlaylistSchema>();
-
 		public static List<ProcedureBase> MatchProcedures(List<SpeechResult> results) {
 			List<ProcedureBase> matching = new List<ProcedureBase>();
 

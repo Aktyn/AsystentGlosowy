@@ -5,14 +5,7 @@ using Asystent.common;
 using System.IO;
 
 namespace Asystent.procedures 
-{
-    public struct PlaylistSchema
-    {
-        public string res { get; set; }
-		public string video_id { get; set; }
-		public string title { get; set; }
-    }
-    
+{    
     public class YoutubePlaylist : ProcedureBase
     {
         public static Regex regex = new Regex( @"(dodaj) (.+)",
@@ -38,23 +31,14 @@ namespace Asystent.procedures
                     VideoInfo video = YouTube.Instance().SearchVideo( user_query );
                     if (match.Success && match.Groups.Count > 0) 
                     {
-                        playlistMemory.Add(new PlaylistSchema 
+                        Playlist.playlistMemory.Add(new Playlist.PlaylistSchema 
                         {
 							res = "request_song", 
 							video_id = video.id, 
 							title = video.title
                         });
-                        Console.WriteLine(playlistMemory.Count);
-                        /*for(int i = 0; i < playlistMemory.Count; i++)
-                            Console.Write(ProcedureBase.playlistMemory[i].video_id + " ");
-                        */
-                        /*try
-                        {
-                            using (StreamWriter save = new StreamWriter(("Playlist.txt"),true))
-                            {
-                                save.WriteLine(VideoInfo);
-                            }
-                        }*/
+                        Console.WriteLine(Playlist.playlistMemory.Count);
+                        Playlist.Empty = false;
                     }
                 }
             }
