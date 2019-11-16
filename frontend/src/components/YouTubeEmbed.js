@@ -5,8 +5,8 @@ import {sendCommand, eventEmitter, MESSAGE_TYPE} from "../serverConnection";
 
 export default class YouTubeEmbed extends React.Component {
     options = {
-        height: '390',
-        width: '640',
+        height: '292',
+        width: '480',
         playerVars: { // https://developers.google.com/youtube/player_parameters
             autoplay: 1
         }
@@ -79,7 +79,10 @@ export default class YouTubeEmbed extends React.Component {
     }
 
     render() {
-        return <YouTube videoId={this.props.videoId} opts={this.options} 
-            onReady={e => this.e = e} onEnd={this._onVideoFinished.bind(this)} />;
+        return <div>
+            <YouTube videoId={this.props.videoId} opts={this.options} 
+                onReady={e => this.e = e} onEnd={this._onVideoFinished.bind(this)} />
+            <div>TODO: pasek ponumerowanych miniaturek alternatywnych filmów</div>
+        </div>;
     }
 }

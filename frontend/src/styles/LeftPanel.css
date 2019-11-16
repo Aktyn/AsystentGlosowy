@@ -1,0 +1,19 @@
+.left-panel {
+    border-right: 1px solid #fff1;
+    height: 100%;
+    overflow: auto;
+    text-align: left;
+}
+
+.left-panel .sentences {
+    padding: 5px 10px;
+}
+
+.left-panel .sentences > * {
+    color: #fff8;
+}
+
+.left-panel .sentences > .executed {
+    font-weight: bold;
+    color: inherit;
+}
