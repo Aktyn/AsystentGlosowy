@@ -39,6 +39,7 @@ namespace Asystent.procedures {
 							video_id = video.id, 
 							title = video.title
 						} );
+						PlayNow.playNow(video.title, video.id);
 						Finished = true;
 						return;
 					}
