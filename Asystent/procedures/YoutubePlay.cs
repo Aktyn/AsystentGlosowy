@@ -34,12 +34,19 @@ namespace Asystent.procedures {
 						var user_query = match.Groups[match.Groups.Count-1].Value;
 						
 						VideoInfo video = YouTube.Instance().SearchVideo( user_query );
-						SendData( new SongRequestSchema {
+						if(Playlist.currentVideo == null)
+						{
+							SendData( new SongRequestSchema {
 							res = "request_song", 
 							video_id = video.id, 
 							title = video.title
-						} );
-						PlayNow.playNow(video.title, video.id);
+							});
+							Playlist.currentVideo = video;
+						}
+						else
+						{
+							Playlist.add(video);
+						}
 						Finished = true;
 						return;
 					}

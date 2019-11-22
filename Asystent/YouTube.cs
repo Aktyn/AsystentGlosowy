@@ -4,7 +4,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 
 namespace Asystent {
-	public struct VideoInfo {
+	public class VideoInfo {
 		public string id { get; set; }
 		public string title { get; set; }
 	}

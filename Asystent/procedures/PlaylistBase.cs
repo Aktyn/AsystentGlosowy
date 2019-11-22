@@ -7,62 +7,48 @@ namespace Asystent.procedures
 {
     public class Playlist
     {
-        public struct PlaylistSchema
+        public struct PlaylistEndSchema
         {
-            public string playlistName {get; set;}
-            public string res { get; set; }
-            public string video_id { get; set; }
-            public string title { get; set; }
+            public string res {get; set;}
         }
-        public static List<PlaylistSchema> playlistMemory = new List<PlaylistSchema>();
 
-        public string playlistName;
-        public static bool Empty = true;
-        public static int counter = 0;
-        private static int abacus;
-        public static void add(string _title, string _video_id)
+        public static List<VideoInfo> playlistMemory = new List<VideoInfo>();
+        public static VideoInfo currentVideo = null;
+
+        public static bool isEmpty()
         {
-            playlistMemory.Add(new Playlist.PlaylistSchema 
-               {
-					res = "request_song", 
-					video_id = _video_id, 
-					title = _title
-                });
-        }
-        public static bool check()
-        {
-            if (abacus != counter)
+            if(playlistMemory.Count == 0)
                 return true;
             return false;
         }
+       
+        public static void add(VideoInfo video)
+        {
+            playlistMemory.Add(video);
+            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistMemory.Count);
+
+        }
+        
+        public static VideoInfo getNext()
+        {
+            VideoInfo first = playlistMemory[0];
+            playlistMemory.RemoveAt(0);
+            currentVideo = first;
+
+            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistMemory.Count);
+            return first;
+        }
+        /*
         public static void skip()
         {
-                if(check())
-                {
-                    PlaylistSchema temp = new PlaylistSchema();
-                    temp = Playlist.playlistMemory[0];
-                    Playlist.playlistMemory.RemoveAt(0);		
-                    Playlist.playlistMemory.Add(temp);
-                    abacus++;
-                }
+
         }
+        */
         /*
         public string find()
         {
             return;
         }
         */
-    }
-
-    public class PlayNow
-    {
-        public static string title;
-        public static string video_id;
-
-        public static void playNow(string _title, string _video_id)
-        {
-            title = _title;
-            video_id = _video_id;
-        }
     }
 }
