@@ -9,7 +9,6 @@ export default function Microphone() {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(microphone => {
         if(microphone) {
             setMicIsOn(true);
-            console.log(microphone);
         }
     }).catch(() => {
         setMicIsOn(false);

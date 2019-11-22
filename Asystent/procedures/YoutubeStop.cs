@@ -12,7 +12,7 @@ namespace Asystent.procedures
     public class YoutubeStop : ProcedureBase
     {
         public static Regex regex = new Regex(
-            @"(zatrzymaj|zastopuj|stop) ?(film|utwor|piosenkę)?",
+            @"(zatrzymaj|zastopuj|stop|pauza|pauzuj) ?(film|utwor|piosenkę)?",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public YoutubeStop() { }

@@ -11,7 +11,7 @@ namespace Asystent.procedures {
 	}
 	public class YoutubePlay : ProcedureBase {
 		public static Regex regex = new Regex(
-			@"(zagraj|graj|odtw[oó]rz|odtwarzaj) ?(piosenk[eę]|utw[oó]r)? (.+)",
+			@"(zagraj|graj|od?tw[oó]rz|odtwarzaj) ?(piosenk[eę]|utw[oó]r)? (.+)",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		
 		public YoutubePlay() { }
@@ -37,9 +37,9 @@ namespace Asystent.procedures {
 						if(Playlist.currentVideo == null)
 						{
 							SendData( new SongRequestSchema {
-							res = "request_song", 
-							video_id = video.id, 
-							title = video.title
+								res = "request_song", 
+								video_id = video.id, 
+								title = video.title
 							});
 							Playlist.currentVideo = video;
 						}

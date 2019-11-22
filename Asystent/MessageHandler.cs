@@ -108,18 +108,19 @@ namespace Asystent {
 						if(!Playlist.isEmpty())
 						{
 							//Console.WriteLine(Playlist.getNext());
-							var tmp = Playlist.getNext();
+							var next = Playlist.getNext();
 							clientConn.Send(JsonConvert.SerializeObject(new SongRequestSchema {
-																			res = "request_song", 
-																			video_id = tmp.id, 
-																			title = tmp.title
-																		}));
+									res = "request_song", 
+									video_id = next.id, 
+									title = next.title
+								}));
 							break;
 						}
 						else
 						{
 							Playlist.PlaylistEndSchema end = new Playlist.PlaylistEndSchema();
 							end.res = "end_playlist";
+							Playlist.currentVideo = null;
 							clientConn.Send(JsonConvert.SerializeObject(end));
 
 							Console.WriteLine("Pusta kolejka. <MessengeHandler>");

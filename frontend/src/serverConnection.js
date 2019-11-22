@@ -1,4 +1,5 @@
 ﻿import SpeechModule from './speechModule';
+import notify from './notifications';
 
 const EventEmitter = require('events');
 export const eventEmitter = new EventEmitter();
@@ -56,6 +57,9 @@ export function handleJSON(data) {
 			break;
 		case 'volume_up':
 			eventEmitter.emit('changeVolume', parseInt(data.volume||5));
+			break;
+		case 'end_playlist':
+			notify("Brak filmów w kolejce. Odtwarzanie zakończone.");
 			break;
 		default:
 			console.warn('Unknown server message');
