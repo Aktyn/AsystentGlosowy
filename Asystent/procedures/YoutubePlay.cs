@@ -8,6 +8,7 @@ namespace Asystent.procedures {
 		public string res { get; set; }
 		public string video_id { get; set; }
 		public string title { get; set; }
+		public List<VideoInfo> video_list { get; set; }
 	}
 	public class YoutubePlay : ProcedureBase {
 		public static Regex regex = new Regex(
@@ -31,21 +32,22 @@ namespace Asystent.procedures {
 				if (regex.IsMatch(res.result)) {
 					var match = regex.Match(res.result);
 					if (match.Success && match.Groups.Count > 0) {
-						var user_query = match.Groups[match.Groups.Count-1].Value;
+						var user_query =match.Groups[match.Groups.Count-1].Value;
 						
-						VideoInfo video = YouTube.Instance().SearchVideo( user_query );
+						List<VideoInfo> video = YouTube.Instance().SearchVideos( user_query );
 						if(Playlist.currentVideo == null)
 						{
 							SendData( new SongRequestSchema {
 								res = "request_song", 
-								video_id = video.id, 
-								title = video.title
+								video_list = video,
+								video_id = video[0].id, 
+								title = video[0].title
 							});
-							Playlist.currentVideo = video;
+							Playlist.currentVideo = video[0];
 						}
 						else
 						{
-							Playlist.add(video);
+							Playlist.add(video[0]);
 						}
 						Finished = true;
 						return;
