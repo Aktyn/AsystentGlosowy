@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Asystent.common;
 
 namespace Asystent.procedures
@@ -11,36 +12,53 @@ namespace Asystent.procedures
             public string res {get; set;}
         }
 
-        public static List<VideosEntry> playlistMemory = new List<VideosEntry>();
-        public static VideosEntry current = null;
+        public static List<VideosEntry> playlistState = new List<VideosEntry>();
+        private static VideosEntry current = null;
+
+        public static VideosEntry getCurrent() {
+            return current;
+        }
+        public static void setCurrent(VideosEntry videos) {
+            Playlist.current = videos;
+            update();
+        }
+
+        public static void update() {
+            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistStateUpdate{
+                res = "playlist_update",
+                state = playlistState,
+                current = current
+            }));
+        }
 
         public static bool isEmpty()
         {
-            if(playlistMemory.Count == 0)
+            if(playlistState.Count == 0)
                 return true;
             return false;
         }
        
         public static void add(VideosEntry videos)
         {
-            playlistMemory.Add(videos);
-            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistMemory.Count);
-
+            playlistState.Add(videos);
+            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistState.Count);
+            update();
         }
         
         public static VideosEntry getNext()
         {
-            VideosEntry first = playlistMemory[0];
-            playlistMemory.RemoveAt(0);
+            VideosEntry first = playlistState[0];
+            playlistState.RemoveAt(0);
             current = first;
 
-            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistMemory.Count);
+            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistState.Count);
+            update();
             return first;
         }
 
         public static void clear() {
             current = null;
-            playlistMemory.Clear();
+            playlistState.Clear();
         }
     }
 }

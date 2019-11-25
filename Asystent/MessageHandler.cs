@@ -121,7 +121,7 @@ namespace Asystent {
 						{
 							Playlist.PlaylistEndSchema end = new Playlist.PlaylistEndSchema();
 							end.res = "end_playlist";
-							Playlist.current = null;
+							Playlist.setCurrent(null);
 							clientConn.Send(JsonConvert.SerializeObject(end));
 
 							Console.WriteLine("Pusta kolejka. <MessengeHandler>");

@@ -30,13 +30,13 @@ namespace Asystent.procedures {
 						var user_query =match.Groups[match.Groups.Count-1].Value;
 						
 						VideosEntry videos = YouTube.Instance().SearchVideos( user_query );
-						if(Playlist.current == null)
+						if(Playlist.getCurrent() == null)
 						{
 							SendData( new SongRequestSchema {
 								res = "request_song", 
 								videos = videos,
 							});
-							Playlist.current = videos;
+							Playlist.setCurrent(videos);
 						}
 						else
 						{

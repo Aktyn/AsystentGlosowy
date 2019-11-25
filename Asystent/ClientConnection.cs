@@ -17,11 +17,18 @@ namespace Asystent {
         public event MessageListener OnMessage;
         public event ServerStartListener OnServerStart;
 
-        public ClientConnection() {
+        private ClientConnection() {
             FleckLog.Level = LogLevel.Error;
             
             _wsServer.RestartAfterListenError = true;
         }
+
+        private static ClientConnection _instance = null;
+		public static ClientConnection Instance() {
+			if (_instance == null)
+				_instance = new ClientConnection();
+			return _instance;
+		}
 
         ~ClientConnection() {
             Console.WriteLine("Closing WebSocket server");
