@@ -29,4 +29,22 @@ namespace Asystent.common {
 		public ulong index { get; set; }
 		public string procedure { get; set; }
 	}
+
+	public struct SongRequestSchema {
+		public string res { get; set; }
+		public VideosEntry videos { get; set; }
+	}
+
+	/** COMMON **/
+
+	public class VideosEntry {
+		public VideoInfo selected { get; set; }
+		public List<VideoInfo> pool { get; set; }
+	}
+
+	public struct VideoInfo {
+		public string id { get; set; }
+		public string title { get; set; }
+		public string thumbnail { get; set; }
+	}
 }

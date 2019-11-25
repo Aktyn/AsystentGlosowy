@@ -4,12 +4,7 @@ using System.Text.RegularExpressions;
 using Asystent.common;
 
 namespace Asystent.procedures {
-	public struct SongRequestSchema {
-		public string res { get; set; }
-		public string video_id { get; set; }
-		public string title { get; set; }
-		public List<VideoInfo> video_list { get; set; }
-	}
+	
 	public class YoutubePlay : ProcedureBase {
 		public static Regex regex = new Regex(
 			@"(zagraj|graj|od?tw[oó]rz|odtwarzaj) ?(piosenk[eę]|utw[oó]r)? (.+)",
@@ -34,20 +29,18 @@ namespace Asystent.procedures {
 					if (match.Success && match.Groups.Count > 0) {
 						var user_query =match.Groups[match.Groups.Count-1].Value;
 						
-						List<VideoInfo> video = YouTube.Instance().SearchVideos( user_query );
-						if(Playlist.currentVideo == null)
+						VideosEntry videos = YouTube.Instance().SearchVideos( user_query );
+						if(Playlist.current == null)
 						{
 							SendData( new SongRequestSchema {
 								res = "request_song", 
-								video_list = video,
-								video_id = video[0].id, 
-								title = video[0].title
+								videos = videos,
 							});
-							Playlist.currentVideo = video[0];
+							Playlist.current = videos;
 						}
 						else
 						{
-							Playlist.add(video[0]);
+							Playlist.add(videos);
 						}
 						Finished = true;
 						return;

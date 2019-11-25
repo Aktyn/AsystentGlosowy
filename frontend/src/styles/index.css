@@ -1,3 +1,5 @@
+@import 'common.css';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -9,6 +11,7 @@ body {
   background-color: #243043;
   text-align: center;
   color: white;
+  max-width: 100vw;
 }
 
 button {

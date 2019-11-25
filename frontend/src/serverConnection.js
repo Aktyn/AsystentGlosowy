@@ -30,11 +30,11 @@ export function handleJSON(data) {
 			eventEmitter.emit('ignored', data.procedure);
 			break;
 		case 'request_song':
-			if(data.video_id && data.title) {
-				eventEmitter.emit('songRequested', data.video_id, data.title);
+			if(data.videos) {
+				eventEmitter.emit('songRequested', data.videos);
 			}
 			else {
-				console.error('Problem with requesting song, no video_id or title provided')
+				console.error('Problem with requesting song, no video_id or title provided');
 			}
 			break;
 		case 'play':

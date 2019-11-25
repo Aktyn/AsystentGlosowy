@@ -1,6 +1,7 @@
 ﻿using Fleck;
 using System;
 using System.Collections.Generic;
+using Asystent.procedures;
 
 namespace Asystent {
     public delegate void MessageListener(string message, IWebSocketConnection clientConn);
@@ -41,6 +42,8 @@ namespace Asystent {
                     socket.OnClose = () => {
                         Console.WriteLine("Client disconnected");
                         _connections.Remove(socket);
+                        Playlist.clear();
+                        MessageHandler.Clear();
                     };
                     socket.OnMessage = (message) => {
                         OnMessage?.Invoke(message, socket);

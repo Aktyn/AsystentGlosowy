@@ -36,8 +36,8 @@ export default function Content(props) {
 	}
 
     return <main className="content">
-        {props.video ? 
-			<YouTubeEmbed videoId={props.video.id} /> :
+        {props.videos ? 
+			<YouTubeEmbed videos={props.videos} /> :
 			<div>
                 <img src={logoImg} height={256} alt="Logo"/>
             </div>

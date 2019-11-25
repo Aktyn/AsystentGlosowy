@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
+using Asystent.common;
 
 namespace Asystent.procedures
 {
@@ -12,8 +11,8 @@ namespace Asystent.procedures
             public string res {get; set;}
         }
 
-        public static List<VideoInfo> playlistMemory = new List<VideoInfo>();
-        public static VideoInfo currentVideo = null;
+        public static List<VideosEntry> playlistMemory = new List<VideosEntry>();
+        public static VideosEntry current = null;
 
         public static bool isEmpty()
         {
@@ -22,33 +21,26 @@ namespace Asystent.procedures
             return false;
         }
        
-        public static void add(VideoInfo video)
+        public static void add(VideosEntry videos)
         {
-            playlistMemory.Add(video);
+            playlistMemory.Add(videos);
             Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistMemory.Count);
 
         }
         
-        public static VideoInfo getNext()
+        public static VideosEntry getNext()
         {
-            VideoInfo first = playlistMemory[0];
+            VideosEntry first = playlistMemory[0];
             playlistMemory.RemoveAt(0);
-            currentVideo = first;
+            current = first;
 
             Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistMemory.Count);
             return first;
         }
-        /*
-        public static void skip()
-        {
 
+        public static void clear() {
+            current = null;
+            playlistMemory.Clear();
         }
-        */
-        /*
-        public string find()
-        {
-            return;
-        }
-        */
     }
 }

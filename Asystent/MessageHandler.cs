@@ -62,6 +62,10 @@ namespace Asystent {
 			return _procedure;
 		}
 
+		public static void Clear() {
+			_handler = null;
+		}
+
 		private static SpeechResponse HandleSpeechResult(SpeechMessageSchema data, 
 			IWebSocketConnection clientConn) 
 		{
@@ -104,23 +108,20 @@ namespace Asystent {
 						break;
 					case MessageType.VideoFinished:
 						Console.WriteLine("Finished video: " + JsonConvert.DeserializeObject<VideoFinishedMessageSchema>(message).video_id);
-						//TODO: update playlist state
+						
 						if(!Playlist.isEmpty())
 						{
-							//Console.WriteLine(Playlist.getNext());
-							var next = Playlist.getNext();
 							clientConn.Send(JsonConvert.SerializeObject(new SongRequestSchema {
-									res = "request_song", 
-									video_id = next.id, 
-									title = next.title
-								}));
+								res = "request_song", 
+								videos = Playlist.getNext()
+							}));
 							break;
 						}
 						else
 						{
 							Playlist.PlaylistEndSchema end = new Playlist.PlaylistEndSchema();
 							end.res = "end_playlist";
-							Playlist.currentVideo = null;
+							Playlist.current = null;
 							clientConn.Send(JsonConvert.SerializeObject(end));
 
 							Console.WriteLine("Pusta kolejka. <MessengeHandler>");
