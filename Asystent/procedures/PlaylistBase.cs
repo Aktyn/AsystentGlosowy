@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Asystent.common;
+using Newtonsoft.Json.Linq;
 
 namespace Asystent.procedures
 {
@@ -11,54 +14,70 @@ namespace Asystent.procedures
         {
             public string res {get; set;}
         }
-
-        public static List<VideosEntry> playlistState = new List<VideosEntry>();
-        private static VideosEntry current = null;
-
-        public static VideosEntry getCurrent() {
-            return current;
-        }
-        public static void setCurrent(VideosEntry videos) {
-            Playlist.current = videos;
-            update();
-        }
-
-        public static void update() {
-            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistStateUpdate{
-                res = "playlist_update",
-                state = playlistState,
-                current = current
-            }));
-        }
-
+        public static List<VideoInfo> playlistMemory = new List<VideoInfo>();
+        public static VideoInfo currentVideo = null;
+        public static string directory = @"C:/Users/jarek/Desktop/Nowy folder (3)/Playlista.json";
         public static bool isEmpty()
         {
-            if(playlistState.Count == 0)
+            if(playlistMemory.Count == 0)
                 return true;
             return false;
         }
        
-        public static void add(VideosEntry videos)
+        public static void save(String playlistname)
         {
-            playlistState.Add(videos);
-            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistState.Count);
-            update();
+            List<VideoInfo> newWideo = new List<VideoInfo>();
+            for (int i = 0; i < playlistMemory.Count; i++)
+            {
+                newWideo.Add(new VideoInfo()
+                {
+                    id = playlistMemory[i].id,
+                    title = playlistMemory[i].title
+                });
+            }
+            File.WriteAllText(directory, JsonConvert.SerializeObject(newWideo));
+        }
+
+        public static void load(String playlistname)
+        {
+
+            using (StreamReader readFromFile = new StreamReader(directory))
+            {
+                string json = readFromFile.ReadToEnd();
+                List<VideoInfo> playlistLoad = JsonConvert.DeserializeObject<List<VideoInfo>>(json);
+            }
+
+        }
+
+        
+
+            public static void add(VideoInfo video)
+        {
+            playlistMemory.Add(video);
+            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistMemory.Count);
+
         }
         
-        public static VideosEntry getNext()
+        public static VideoInfo getNext()
         {
-            VideosEntry first = playlistState[0];
-            playlistState.RemoveAt(0);
-            current = first;
+            VideoInfo first = playlistMemory[0];
+            playlistMemory.RemoveAt(0);
+            currentVideo = first;
 
-            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistState.Count);
-            update();
+            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistMemory.Count);
             return first;
         }
+        /*
+        public static void skip()
+        {
 
-        public static void clear() {
-            current = null;
-            playlistState.Clear();
         }
+        */
+        /*
+        public string find()
+        {
+            return;
+        }
+        */
     }
 }
