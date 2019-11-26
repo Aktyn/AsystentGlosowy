@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Asystent.common;
 
 namespace Asystent.procedures
 {
@@ -12,72 +10,70 @@ namespace Asystent.procedures
     {
         public struct PlaylistEndSchema
         {
-            public string res {get; set;}
+            public string res { get; set; }
         }
-        public static List<VideoInfo> playlistMemory = new List<VideoInfo>();
-        public static VideoInfo currentVideo = null;
+
         public static string directory = @"C:/Users/jarek/Desktop/Nowy folder (3)/Playlista.json";
-        public static bool isEmpty()
-        {
-            if(playlistMemory.Count == 0)
-                return true;
-            return false;
+
+        public static List<VideosEntry> playlistState = new List<VideosEntry>();
+        private static VideosEntry current = null;
+
+        public static VideosEntry getCurrent() {
+            return current;
+        }
+        public static void setCurrent(VideosEntry videos) {
+            Playlist.current = videos;
+            update();
+        }
+
+        public static void update() {
+            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistStateUpdate{
+                res = "playlist_update",
+                state = playlistState,
+                current = current
+            }));
+        }
+
+        public static bool isEmpty() {
+            return playlistState.Count == 0;
         }
        
-        public static void save(String playlistname)
-        {
-            List<VideoInfo> newWideo = new List<VideoInfo>();
-            for (int i = 0; i < playlistMemory.Count; i++)
-            {
-                newWideo.Add(new VideoInfo()
-                {
-                    id = playlistMemory[i].id,
-                    title = playlistMemory[i].title
-                });
-            }
-            File.WriteAllText(directory, JsonConvert.SerializeObject(newWideo));
+        public static void add(VideosEntry videos) {
+            playlistState.Add(videos);
+            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistState.Count);
+            update();
+        }
+        
+        public static VideosEntry getNext() {
+            VideosEntry first = playlistState[0];
+            playlistState.RemoveAt(0);
+            current = first;
+
+            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistState.Count);
+            update();
+            return first;
         }
 
-        public static void load(String playlistname)
-        {
+        public static void clear() {
+            current = null;
+            playlistState.Clear();
+        }
+       
+        public static void save(String playlistname) {
+            List<VideosEntry> newWideos = new List<VideosEntry>();
+            for (int i = 0; i < playlistState.Count; i++)
+            {
+                newWideos.Add(playlistState[0]);
+            }
+            File.WriteAllText(directory, JsonConvert.SerializeObject(newWideos));
+        }
 
+        public static void load(String playlistname) {
             using (StreamReader readFromFile = new StreamReader(directory))
             {
                 string json = readFromFile.ReadToEnd();
-                List<VideoInfo> playlistLoad = JsonConvert.DeserializeObject<List<VideoInfo>>(json);
+                List<VideosEntry> playlistLoad = JsonConvert.DeserializeObject<List<VideosEntry>>(json);
             }
-
         }
-
-        
-
-            public static void add(VideoInfo video)
-        {
-            playlistMemory.Add(video);
-            Console.WriteLine(" --- > Dodanie do playlity. | Ilość: " + playlistMemory.Count);
-
-        }
-        
-        public static VideoInfo getNext()
-        {
-            VideoInfo first = playlistMemory[0];
-            playlistMemory.RemoveAt(0);
-            currentVideo = first;
-
-            Console.WriteLine(" --- > Pobranie z playlisty. | Ilość: " + playlistMemory.Count);
-            return first;
-        }
-        /*
-        public static void skip()
-        {
-
-        }
-        */
-        /*
-        public string find()
-        {
-            return;
-        }
-        */
     }
 }

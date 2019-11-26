@@ -4,6 +4,7 @@ import {eventEmitter, handleJSON} from '../serverConnection';
 import SpeechModule from '../speechModule';
 
 import '../styles/Header.css';
+import notify from '../notifications';
 
 /** @param {{onReset: Function}} props */
 export default function Header(props) {
@@ -39,6 +40,7 @@ export default function Header(props) {
                 SpeechModule.init();
                 SpeechModule.start();
             }}>Reset speech module</button>
+            <button onClick={() => notify('Example notification')}>Example notification</button>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
             <span>server {serverConnected ? 

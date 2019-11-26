@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Asystent.common;
-using System.IO;
 
 namespace Asystent.procedures
 {
@@ -28,21 +26,17 @@ namespace Asystent.procedures
 
             results.Sort((res1, res2) => res1.confidence > res2.confidence ? 0 : 1);
 
-
             foreach (var res in results)
             {
                 if (regex.IsMatch(res.result))
                 {
                     var match = regex.Match(res.result);
-                    var kolejny = Playlist.getNext();
-                    if (match.Success && match.Groups.Count > 0)
-                    {
-                            SendData(new SongRequestSchema
-                             {
-                                video_id = kolejny.id,
-                                title = kolejny.title
-                             });
-                            return;
+                    if (match.Success && match.Groups.Count > 0) {
+                        SendData(new SongRequestSchema {
+							res = "request_song", 
+							videos = Playlist.getNext()
+						});
+                        return;
                     }
                 }
             }

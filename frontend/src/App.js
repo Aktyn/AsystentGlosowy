@@ -8,6 +8,7 @@ import LeftPanel from './components/LeftPanel';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import RightPanel from './components/RightPanel';
+import Notifications from './components/Notifications';
 
 export default class App extends React.Component {
 	//listeners
@@ -148,6 +149,7 @@ export default class App extends React.Component {
 			/>
 			<RightPanel />
 			<Footer />
+			<Notifications />
 		</div>;
 	}
 }
