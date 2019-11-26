@@ -7,6 +7,7 @@ function RightPanel() {
     // thumbnail: "https://i.ytimg.com/vi/wEvUHknyFng/default.jpg"
     // title: "Kalwi &amp; Remi - Explosion (MAJLO &amp; Gazell Club Mix)"
     const [currentVideo, setCurrentVideo] = useState(null);
+    const [playlists, setPlaylits] = useState([]);
     const [videos, setVideos] = useState([]);
 
     const onPlaylistUpdate = (state, current) => {
@@ -14,10 +15,16 @@ function RightPanel() {
         setVideos([current, ...state]);
     };
 
+    const onPlaylistsListUpdate = (playlists) => {
+        setPlaylits(playlists);
+    };
+
     useEffect(() => {
         eventEmitter.on('playlistUpdate', onPlaylistUpdate);
+        eventEmitter.on('playlistsListUpdate', onPlaylistsListUpdate);
         return () => {
             eventEmitter.off('playlistUpdate', onPlaylistUpdate);
+            eventEmitter.off('playlistsListUpdate', onPlaylistsListUpdate);
         }
     }, []);
 
@@ -38,8 +45,9 @@ function RightPanel() {
         <div style={{textAlign: 'center'}}>
             <h4>Playlisty</h4>
             <section className="playlists">
-                <div>Szalone lata 60 (13)</div>
-                <div>Trailery (69)</div>
+                {playlists.map(playlist => (
+                    <div>{playlist}</div>
+                ))}
             </section>
         </div>
     </aside>

@@ -41,6 +41,12 @@ namespace Asystent.common {
 		public VideosEntry current { get; set; }
 	}
 
+	public struct PlaylistsListUpdate {
+		public string res { get; set; }
+		public string[] playlists { get; set; }
+	}
+
+
 	/** COMMON **/
 
 	public class VideosEntry {

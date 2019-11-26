@@ -45,6 +45,8 @@ namespace Asystent {
                     socket.OnOpen = () => {
                         Console.WriteLine("Client connected");
                         _connections.Add(socket);
+
+                        Playlist.updatePlaylistsList();
                     };
                     socket.OnClose = () => {
                         Console.WriteLine("Client disconnected");

@@ -62,7 +62,10 @@ export function handleJSON(data) {
 			notify("Brak filmów w kolejce. Odtwarzanie zakończone.");
 			break;
 		case 'playlist_update':
-				eventEmitter.emit('playlistUpdate', data.state, data.current);
+			eventEmitter.emit('playlistUpdate', data.state, data.current);
+			break;
+		case 'playlists_list_update':
+				eventEmitter.emit('playlistsListUpdate', data.playlists);
 			break;
 		default:
 			console.warn('Unknown server message');

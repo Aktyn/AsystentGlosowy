@@ -36,6 +36,20 @@ namespace Asystent.procedures
             }));
         }
 
+        public static void updatePlaylistsList() {
+            string[] playlists = Directory.GetFiles(playlistsDir);
+            for(int i=0; i<playlists.Length; i++) {
+                string[] exploded = playlists[i].Split("\\");
+                string[] fileExploded = exploded[exploded.Length-1].Split(".");
+                playlists[i] = fileExploded[0];
+            }
+
+            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistsListUpdate{
+                res = "playlists_list_update",
+                playlists = playlists
+            }));
+        }
+
         public static bool isEmpty() {
             return playlistState.Count == 0;
         }
@@ -80,16 +94,27 @@ namespace Asystent.procedures
                 newWideos.Add(playlistState[0]);
             }
             File.WriteAllText(filePath, JsonConvert.SerializeObject(newWideos));
+
+            updatePlaylistsList();
+
+            //TODO: notification
         }
 
         public static void load(String playlistname) {
             preparePlaylistsDir();
 
-            /*using (StreamReader readFromFile = new StreamReader(directory))
+            string filePath = playlistsDir + "/" + playlistname + ".json";
+
+            using (StreamReader readFromFile = new StreamReader(filePath))
             {
                 string json = readFromFile.ReadToEnd();
-                List<VideosEntry> playlistLoad = JsonConvert.DeserializeObject<List<VideosEntry>>(json);
-            }*/
+                playlistState = JsonConvert.DeserializeObject<List<VideosEntry>>(json);
+                
+                ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new SongRequestSchema {
+					res = "request_song", 
+					videos = Playlist.getNext()
+				}));
+            }
         }
     }
 }
