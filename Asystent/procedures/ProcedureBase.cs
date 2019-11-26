@@ -16,7 +16,7 @@ namespace Asystent.procedures {
 	public abstract class ProcedureBase {
 		private static Type[] procedures = { typeof(Example), typeof(YoutubePlay), typeof(YoutubeVolume), typeof(YoutubeMute),
 		 typeof(VolumeUnmute), typeof(YoutubeIncVolume), typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume),
-          typeof(YoutubePlaylistSaveAs), typeof(YoutubeNastepny),typeof(YoutubePlaylistLoad),
+          typeof(YoutubePlaylistSaveAs), typeof(YoutubeNext), typeof(YoutubePlaylistLoad),
          };
 		//public static Regex regex = null;
 

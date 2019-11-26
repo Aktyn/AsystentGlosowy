@@ -13,7 +13,9 @@ namespace Asystent.procedures
             public string res { get; set; }
         }
 
-        public static string directory = @"C:/Users/jarek/Desktop/Nowy folder (3)/Playlista.json";
+        private static readonly string playlistsDir = Path.GetFullPath(
+            Path.Combine(Directory.GetCurrentDirectory(), "..", "playlists")
+        );
 
         public static List<VideosEntry> playlistState = new List<VideosEntry>();
         private static VideosEntry current = null;
@@ -58,22 +60,36 @@ namespace Asystent.procedures
             current = null;
             playlistState.Clear();
         }
+
+        private static void preparePlaylistsDir() {
+            bool exists = System.IO.Directory.Exists(playlistsDir);
+            if(!exists)
+                System.IO.Directory.CreateDirectory(playlistsDir);
+        }
        
         public static void save(String playlistname) {
+            preparePlaylistsDir();
+
+            string filePath = playlistsDir + "/" + playlistname + ".json";
+            Console.WriteLine(filePath);
+
             List<VideosEntry> newWideos = new List<VideosEntry>();
+            newWideos.Add(current);
             for (int i = 0; i < playlistState.Count; i++)
             {
                 newWideos.Add(playlistState[0]);
             }
-            File.WriteAllText(directory, JsonConvert.SerializeObject(newWideos));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(newWideos));
         }
 
         public static void load(String playlistname) {
-            using (StreamReader readFromFile = new StreamReader(directory))
+            preparePlaylistsDir();
+
+            /*using (StreamReader readFromFile = new StreamReader(directory))
             {
                 string json = readFromFile.ReadToEnd();
                 List<VideosEntry> playlistLoad = JsonConvert.DeserializeObject<List<VideosEntry>>(json);
-            }
+            }*/
         }
     }
 }

@@ -42,8 +42,10 @@ namespace Asystent {
 				//Console.WriteLine(matchingProcedures.Count);
 			
 				if (matchingProcedures.Count > 1) {
-					Console.WriteLine("More than one procedure has been matched in single result");
-					//TODO: list those procedure names
+					Console.WriteLine("More than one procedure has been matched in single result:");
+					foreach(ProcedureBase proc in matchingProcedures) {
+						Console.WriteLine(proc.ToString());
+					}
 					return false;
 				}
 
@@ -119,10 +121,10 @@ namespace Asystent {
 						}
 						else
 						{
-							Playlist.PlaylistEndSchema end = new Playlist.PlaylistEndSchema();
-							end.res = "end_playlist";
 							Playlist.setCurrent(null);
-							clientConn.Send(JsonConvert.SerializeObject(end));
+							clientConn.Send(JsonConvert.SerializeObject(new Playlist.PlaylistEndSchema {
+                                res = "end_playlist"
+                            }));
 
 							Console.WriteLine("Pusta kolejka. <MessengeHandler>");
 						}

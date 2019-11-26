@@ -32,7 +32,8 @@ export default function Notifications() {
 
     if(messages.length > 0) {
         return messages.map(msg => (
-            <div key={msg.id} className={`notification${msg.fading ? ' fading' : ''}`}>{msg.message}
+            <div key={msg.id} className={`notification${msg.fading ? ' fading' : ''}`}>
+                {msg.message}
             </div>
         ))
     }

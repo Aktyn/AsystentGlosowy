@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Asystent.common;
 
@@ -11,9 +12,9 @@ namespace Asystent.procedures
         public string title { get; set; }
     }
 
-    public class YoutubeNastepny : ProcedureBase
+    public class YoutubeNext : ProcedureBase
     {
-        public static Regex regex = new Regex(@"(nastepny) ?(film|utwor|piosenkę)?",
+        public static Regex regex = new Regex(@"(nast[eę]pny|pomi[nń])",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public override void Update(List<SpeechResult> results)
@@ -32,10 +33,16 @@ namespace Asystent.procedures
                 {
                     var match = regex.Match(res.result);
                     if (match.Success && match.Groups.Count > 0) {
-                        SendData(new SongRequestSchema {
-							res = "request_song", 
-							videos = Playlist.getNext()
-						});
+                        if(!Playlist.isEmpty())
+						{
+							SendData(new SongRequestSchema {
+								res = "request_song", 
+								videos = Playlist.getNext()
+							});
+						}
+                        //TODO: else error response to use ('cannot skip last video' or smh like that)
+
+                        Finished = true;
                         return;
                     }
                 }
