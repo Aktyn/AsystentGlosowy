@@ -43,7 +43,7 @@ export default class YouTubeEmbed extends React.Component {
     _onVideoFinished() {
         sendCommand({
 			type: MESSAGE_TYPE.video_finished,
-			video_id: this.props.videoId
+			video_id: this.props.videos.selected.id
 		});
     }
 
@@ -80,9 +80,15 @@ export default class YouTubeEmbed extends React.Component {
 
     render() {
         return <div>
-            <YouTube videoId={this.props.videoId} opts={this.options} 
+            <YouTube videoId={this.props.videos.selected.id} opts={this.options} 
                 onReady={e => this.e = e} onEnd={this._onVideoFinished.bind(this)} />
-            <div>TODO: pasek ponumerowanych miniaturek alternatywnych filmów</div>
+            <div className='videos-pool'>{this.props.videos.pool.map((videoInfo, index) => {
+                return <div key={videoInfo.id} className={videoInfo.id === this.props.videos.selected.id ? 'current' : ''}>
+                    <label>{videoInfo.title}</label>
+                    <img src={videoInfo.thumbnail} alt='thumbnail' />
+                    <span>{index+1}</span>
+                </div>;
+            })}</div>
         </div>;
     }
 }

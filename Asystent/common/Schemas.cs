@@ -23,10 +23,43 @@ namespace Asystent.common {
 	}
 
 	/** RESPONSES TO CLIENT **/
+
+	public struct SimpleResponse {
+		public string res { get; set; }
+	}
 	
 	public struct SpeechResponse {
 		public string res { get; set; }
 		public ulong index { get; set; }
 		public string procedure { get; set; }
+	}
+
+	public struct SongRequestSchema {
+		public string res { get; set; }
+		public VideosEntry videos { get; set; }
+	}
+
+	public struct PlaylistStateUpdate {
+		public string res { get; set; }
+		public List<VideosEntry> state { get; set; }
+		public VideosEntry current { get; set; }
+	}
+
+	public struct ConfirmationRequestSchema {
+		public string res { get; set; }
+		public string dialog_content { get; set; }
+	}
+
+	/** COMMON **/
+
+	public class VideosEntry {
+		public VideoInfo selected { get; set; }
+		public List<VideoInfo> pool { get; set; }
+	}
+
+	public struct VideoInfo {
+		public string id { get; set; }
+		public string title { get; set; }
+		public string thumbnail { get; set; }
 	}
 }

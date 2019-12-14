@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Linq;
 using Asystent.common;
 
 namespace Asystent.procedures {
-	public class Example : ProcedureBase {
-		public static Regex regex = new Regex(@"przyk[lł]adow[ae] (komenda|polecenie) ?(.*)",
+	public class ExampleConfirmation : ProcedureBase {
+		public static Regex regex = new Regex(@"przyk[lł]adow[ae] (komenda|polecenie)",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-		public Example() { }
+		public ExampleConfirmation() { }
 		
 		public sealed override void Update(List<SpeechResult> results) {
 			Results = results;
@@ -24,16 +23,17 @@ namespace Asystent.procedures {
 			
 			foreach (var res in results) {
 				if( regex.IsMatch(res.result) ) {
-					var match = regex.Match(res.result);
-					String example_data = "";
-					if (match.Success && match.Groups.Count > 0) {
-						example_data = match.Groups[match.Groups.Count-1].Value;
-					}
-					Console.WriteLine("Executing example command with given data: \"" + example_data + '"');
-					Finished = true;
+					RequestConfirmation("Czy na pewno chcesz uruchomić przykładową komendę?");
 					return;
 				}
 			}
+		}
+
+		override public void onConfirm() {
+			Console.WriteLine("Procedure confirmed");
+		}
+		override public void onReject() {
+			Console.WriteLine("Procedure rejected");
 		}
 	}
 }

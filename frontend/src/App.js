@@ -8,6 +8,8 @@ import LeftPanel from './components/LeftPanel';
 import Content from './components/Content';
 import Footer from './components/Footer';
 import RightPanel from './components/RightPanel';
+import Notifications from './components/Notifications';
+import Dialog from './components/Dialog';
 
 export default class App extends React.Component {
 	//listeners
@@ -16,8 +18,7 @@ export default class App extends React.Component {
 	commandIgnoredListener = this._onCommandIgnored.bind(this);
 
 	state = {
-		/** @type {{id: string, title: string} | null} */
-		currentVideo: null,
+		currentVideos: null,
 		/** @type {{
 		 * index: number, 
 		 * confidence: number, 
@@ -60,11 +61,11 @@ export default class App extends React.Component {
 		console.log('Speech recognition ended');
 	}
 
-	_onSongRequested(id, title) {
+	_onSongRequested(videos) {
 		this.setState({
-			currentVideo: {id, title}
+			currentVideos: videos
 		});
-		console.log('VideoId:', id, 'Title:', title);
+		console.log('VideoId:', videos.selected.id, 'Title:', videos.selected.title);
 	}
 
 	_onCommandExecuted(index) {
@@ -135,7 +136,7 @@ export default class App extends React.Component {
 			<Header onReset={() => this.setState({testCommandIndex: 0})} />
 			<LeftPanel sentences={this.state.sentences} />
 			<Content
-				video={this.state.currentVideo}
+				videos={this.state.currentVideos}
 				activeProcedureName={this.state.activeProcedureName}
 				testCommandIndex={this.state.testCommandIndex}
 				onTestCommandIndexChange={testCommandIndex => {
@@ -149,6 +150,8 @@ export default class App extends React.Component {
 			/>
 			<RightPanel />
 			<Footer />
+			<Notifications />
+			<Dialog />
 		</div>;
 	}
 }

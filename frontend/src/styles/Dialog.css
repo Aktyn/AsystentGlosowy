@@ -1,0 +1,43 @@
+.dialog-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0004;
+    animation: blur-in 0.5s ease-in-out forwards;
+}
+
+.dialog-container > .dialog {
+    background-color: #fff;
+    color: #243043;
+    padding: 10px;
+    box-shadow: 0px 2px 5px #0008;
+    border-radius: 5px;
+}
+
+.dialog-container > .dialog > label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.dialog-container > .dialog button {
+    background-color: #fff;
+    color: #243043;
+    box-shadow: 0px 2px 4px #0008;
+    margin: 5px;
+}
+
+@keyframes blur-in {
+    0% {
+        opacity: 0;
+        filter: blur(50px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+    }
+}

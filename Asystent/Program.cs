@@ -21,7 +21,7 @@ namespace Asystent {
 			}
 
 			//Establishing WebSocket connections
-			var connection = new ClientConnection();
+			var connection = ClientConnection.Instance();
 			connection.OnMessage += MessageHandler.OnMessage;
 			connection.OnServerStart += () => {
 				#if !DEBUG

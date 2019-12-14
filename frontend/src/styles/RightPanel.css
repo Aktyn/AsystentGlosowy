@@ -21,6 +21,10 @@
 .right-panel .queue div label {
     display: block;
     padding-bottom: 5px;
+    overflow: hidden;
+    max-height: 42px;
+    font-size: 13px;
+    margin-bottom: 5px;
 }
 
 .right-panel .queue img {
@@ -40,4 +44,8 @@
     border-radius: 5px;
     box-shadow: 0px 2px 4px #0005;
     margin-bottom: 10px;
+}
+
+.right-panel .queue.current > * {
+    background-color: #55ff5553;
 }

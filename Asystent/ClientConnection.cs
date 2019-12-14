@@ -1,6 +1,7 @@
 ﻿using Fleck;
 using System;
 using System.Collections.Generic;
+using Asystent.procedures;
 
 namespace Asystent {
     public delegate void MessageListener(string message, IWebSocketConnection clientConn);
@@ -16,11 +17,18 @@ namespace Asystent {
         public event MessageListener OnMessage;
         public event ServerStartListener OnServerStart;
 
-        public ClientConnection() {
+        private ClientConnection() {
             FleckLog.Level = LogLevel.Error;
             
             _wsServer.RestartAfterListenError = true;
         }
+
+        private static ClientConnection _instance = null;
+		public static ClientConnection Instance() {
+			if (_instance == null)
+				_instance = new ClientConnection();
+			return _instance;
+		}
 
         ~ClientConnection() {
             Console.WriteLine("Closing WebSocket server");
@@ -37,10 +45,14 @@ namespace Asystent {
                     socket.OnOpen = () => {
                         Console.WriteLine("Client connected");
                         _connections.Add(socket);
+
+                        Playlist.updatePlaylistsList();
                     };
                     socket.OnClose = () => {
                         Console.WriteLine("Client disconnected");
                         _connections.Remove(socket);
+                        Playlist.clear();
+                        MessageHandler.Clear();
                     };
                     socket.OnMessage = (message) => {
                         OnMessage?.Invoke(message, socket);

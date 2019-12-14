@@ -42,8 +42,10 @@ namespace Asystent {
 				//Console.WriteLine(matchingProcedures.Count);
 			
 				if (matchingProcedures.Count > 1) {
-					Console.WriteLine("More than one procedure has been matched in single result");
-					//TODO: list those procedure names
+					Console.WriteLine("More than one procedure has been matched in single result:");
+					foreach(ProcedureBase proc in matchingProcedures) {
+						Console.WriteLine(proc.ToString());
+					}
 					return false;
 				}
 
@@ -62,6 +64,17 @@ namespace Asystent {
 			return _procedure;
 		}
 
+		public static void Clear() {
+			_handler = null;
+		}
+
+		private static SpeechResponse IgnoreResponse(ProcedureBase procedure) {
+			var resp = new SpeechResponse {res = "ignored"};
+			if(procedure != null)
+				resp.procedure = procedure.GetType().Name;
+			return resp;
+		}
+
 		private static SpeechResponse HandleSpeechResult(SpeechMessageSchema data, 
 			IWebSocketConnection clientConn) 
 		{
@@ -70,14 +83,25 @@ namespace Asystent {
 			else
 				_handler = new MessageHandler(data.results, data.result_index);
 
-			bool executed = _handler.Execute(clientConn);
 			ProcedureBase procedure = _handler.GetProcedure();
 
-			if (!executed) {
-				var resp = new SpeechResponse {res = "ignored"};
-				if(procedure != null)
-					resp.procedure = procedure.GetType().Name;
-				return resp;
+			if(ProcedureBase.IsConfirmationRequested()) {
+				switch(ProcedureBase.ParseConfirmation(data.results)) {
+					case ConfirmationResult.UNKNOWN:
+						return IgnoreResponse(procedure);
+					case ConfirmationResult.CONFIRMED:
+						ProcedureBase.Confirm();
+						_handler = null;
+						return new SpeechResponse{res = "confirmed", index = data.result_index};
+					case ConfirmationResult.REJECTED:
+						ProcedureBase.Reject();
+						_handler = null;
+						return new SpeechResponse{res = "rejected", index = data.result_index};
+				}
+			}
+
+			if (!_handler.Execute(clientConn)) {
+				return IgnoreResponse(procedure);
 			}
 			
 			if (procedure == null)
@@ -104,26 +128,23 @@ namespace Asystent {
 						break;
 					case MessageType.VideoFinished:
 						Console.WriteLine("Finished video: " + JsonConvert.DeserializeObject<VideoFinishedMessageSchema>(message).video_id);
-						//TODO: update playlist state
+						
 						if(!Playlist.isEmpty())
 						{
-							//Console.WriteLine(Playlist.getNext());
-							var next = Playlist.getNext();
 							clientConn.Send(JsonConvert.SerializeObject(new SongRequestSchema {
-									res = "request_song", 
-									video_id = next.id, 
-									title = next.title
-								}));
+								res = "request_song", 
+								videos = Playlist.getNext()
+							}));
 							break;
 						}
 						else
 						{
-							Playlist.PlaylistEndSchema end = new Playlist.PlaylistEndSchema();
-							end.res = "end_playlist";
-							Playlist.currentVideo = null;
-							clientConn.Send(JsonConvert.SerializeObject(end));
+							Playlist.setCurrent(null);
+							clientConn.Send(JsonConvert.SerializeObject(new Playlist.PlaylistEndSchema {
+                                res = "end_playlist"
+                            }));
 
-							Console.WriteLine("Pusta kolejka. <MessengeHandler>");
+							Console.WriteLine("Pusta kolejka. <MessageHandler>");
 						}
 						break;
 					default:

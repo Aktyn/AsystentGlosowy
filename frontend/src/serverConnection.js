@@ -30,11 +30,11 @@ export function handleJSON(data) {
 			eventEmitter.emit('ignored', data.procedure);
 			break;
 		case 'request_song':
-			if(data.video_id && data.title) {
-				eventEmitter.emit('songRequested', data.video_id, data.title);
+			if(data.videos) {
+				eventEmitter.emit('songRequested', data.videos);
 			}
 			else {
-				console.error('Problem with requesting song, no video_id or title provided')
+				console.error('Problem with requesting song, no video_id or title provided');
 			}
 			break;
 		case 'play':
@@ -60,6 +60,21 @@ export function handleJSON(data) {
 			break;
 		case 'end_playlist':
 			notify("Brak filmów w kolejce. Odtwarzanie zakończone.");
+			break;
+		case 'playlist_update':
+			eventEmitter.emit('playlistUpdate', data.state, data.current);
+			break;
+		case 'request_confirmation':
+			eventEmitter.emit('showConfirmationDialog', data.dialog_content);
+			break;
+		case 'confirmed':
+			eventEmitter.emit('confirmProcedure');
+			break;
+		case 'rejected':
+			eventEmitter.emit('rejectProcedure');
+			break;
+		case 'confirmation_timed_out':
+			eventEmitter.emit('rejectProcedure');
 			break;
 		default:
 			console.warn('Unknown server message');
