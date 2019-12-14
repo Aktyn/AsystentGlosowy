@@ -64,6 +64,9 @@ export function handleJSON(data) {
 		case 'playlist_update':
 			eventEmitter.emit('playlistUpdate', data.state, data.current);
 			break;
+		case 'playlists_list_update':
+			eventEmitter.emit('playlistsListUpdate', data.playlists);
+			break;
 		case 'request_confirmation':
 			eventEmitter.emit('showConfirmationDialog', data.dialog_content);
 			break;

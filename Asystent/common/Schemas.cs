@@ -50,6 +50,12 @@ namespace Asystent.common {
 		public string dialog_content { get; set; }
 	}
 
+	public struct PlaylistsListUpdate {
+		public string res { get; set; }
+		public string[] playlists { get; set; }
+	}
+
+
 	/** COMMON **/
 
 	public class VideosEntry {
