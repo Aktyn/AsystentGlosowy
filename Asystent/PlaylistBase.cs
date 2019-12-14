@@ -37,7 +37,12 @@ namespace Asystent.procedures
         }
 
         public static void updatePlaylistsList() {
-            //string[] 
+            string[] playlists = Directory.GetFiles(playlistsDir);
+            for(int i=0; i<playlists.Length; i++) {
+                string[] exploded = playlists[i].Split("\\");
+                string[] fileExploded = exploded[exploded.Length-1].Split(".");
+                playlists[i] = fileExploded[0];
+            }
 
             ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistStateUpdate{
                 res = "playlists_list_update",
