@@ -44,10 +44,9 @@ namespace Asystent.procedures
                 playlists[i] = fileExploded[0];
             }
 
-            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistStateUpdate{
+            ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new PlaylistsListUpdate{
                 res = "playlists_list_update",
-                state = playlistState,
-                current = current
+                playlists = playlists
             }));
         }
 
@@ -110,7 +109,11 @@ namespace Asystent.procedures
             {
                 string json = readFromFile.ReadToEnd();
                 playlistState = JsonConvert.DeserializeObject<List<VideosEntry>>(json);
-                Playlist.getNext();
+                
+                ClientConnection.Instance().DistributeMessage(JsonConvert.SerializeObject(new SongRequestSchema {
+					res = "request_song", 
+					videos = Playlist.getNext()
+				}));
             }
         }
     }
