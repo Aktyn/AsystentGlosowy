@@ -16,7 +16,7 @@ function RightPanel() {
     };
 
     const onPlaylistsListUpdate = (playlists) => {
-        setPlaylists(playlists);
+        setPlaylists(Array.from(new Set(playlists)));
     };
 
     useEffect(() => {
@@ -46,7 +46,7 @@ function RightPanel() {
             <h4>Playlisty</h4>
             <section className="playlists">
                 {playlists.map(playlist => (
-                    <div>{playlist}</div>
+                    <div key={playlist}>{playlist}</div>
                 ))}
             </section>
         </div>
