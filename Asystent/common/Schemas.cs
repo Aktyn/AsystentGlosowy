@@ -55,6 +55,11 @@ namespace Asystent.common {
 		public string[] playlists { get; set; }
 	}
 
+	public struct CalculationInfixResult {
+		public string res { get; set; }
+		public string infix { get; set; }
+	}
+
 
 	/** COMMON **/
 

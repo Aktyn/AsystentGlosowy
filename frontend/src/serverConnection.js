@@ -1,5 +1,6 @@
 ﻿import SpeechModule from './speechModule';
 import notify from './notifications';
+import calculateInfix from './infixCalculator';
 
 const EventEmitter = require('events');
 export const eventEmitter = new EventEmitter();
@@ -78,6 +79,9 @@ export function handleJSON(data) {
 			break;
 		case 'confirmation_timed_out':
 			eventEmitter.emit('rejectProcedure');
+			break;
+		case 'calculate_infix':
+			calculateInfix(data.infix);
 			break;
 		default:
 			console.warn('Unknown server message');

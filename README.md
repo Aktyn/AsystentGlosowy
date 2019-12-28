@@ -7,9 +7,10 @@
 <div>Komunikacja między frontendem a backendem odbywa się na zasadzie przesyłania komunikatów w formacie JSON poprzez WebSocket.</div>
 
 #### Funkcjonalność
-<div>
-    ---
-</div>
+<ul>
+    <li>Sterowanie odtwarzanym filmem (zmiana głośności, pauzowanie, pomijanie)</li>
+    <li>Tworzenie nazwanych playlist</li>
+</ul>
 
 #### Uruchamianie
 <ul>

@@ -20,9 +20,12 @@ namespace Asystent.procedures {
 	public delegate void SendDataListener(object data);
 
 	public abstract class ProcedureBase {
-		private static Type[] procedures = { typeof(ExampleConfirmation), typeof(YoutubePlay), typeof(YoutubeVolume), typeof(YoutubeMute),
-		 typeof(VolumeUnmute), typeof(YoutubeIncVolume), typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume),
-          typeof(YoutubePlaylistSaveAs), typeof(YoutubeNext), typeof(YoutubePlaylistLoad),
+		private static Type[] procedures = { 
+			typeof(ExampleConfirmation), typeof(YoutubePlay), typeof(YoutubeVolume),
+			typeof(YoutubeMute), typeof(VolumeUnmute), typeof(YoutubeIncVolume),
+			typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume),
+			typeof(YoutubePlaylistSaveAs), typeof(YoutubeNext), typeof(YoutubePlaylistLoad),
+			typeof(Calculate)
          };
 		private static Regex confirmRegex = new Regex(@"(tak|potwierd[zź]|potwierdzam|zatwierd[zź])",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);

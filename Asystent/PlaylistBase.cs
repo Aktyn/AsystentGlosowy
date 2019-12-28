@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +40,7 @@ namespace Asystent.procedures
         public static void updatePlaylistsList() {
             string[] playlists = Directory.GetFiles(playlistsDir);
             for(int i=0; i<playlists.Length; i++) {
-                string[] exploded = playlists[i].Split("\\");
+                string[] exploded = Regex.Split(playlists[i], @"(\\|/)");//playlists[i].Split("\\");
                 string[] fileExploded = exploded[exploded.Length-1].Split(".");
                 playlists[i] = fileExploded[0];
             }
