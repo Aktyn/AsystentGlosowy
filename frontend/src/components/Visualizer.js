@@ -26,6 +26,7 @@ export default function Visualizer() {
                 analyser.getByteFrequencyData(frequencyArray);
                 
                 const newLengths = [];
+                //NOTE: do not use bufferLength in this loop
                 for (let i=0; i<frequencyArray.length; i++) {
                     const adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
                     newLengths.push(adjustedLength);
