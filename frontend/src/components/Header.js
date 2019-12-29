@@ -25,10 +25,14 @@ export default function Header(props) {
 
     return <nav className="header">
         <div className='buttons-panel'>
-            <button id='playBtn' onClick={() => handleJSON({res: 'play'})}>Play</button>
-            <button id='pauseBtn' onClick={() => handleJSON({res: 'pause'})}>Pause</button>
-            <button id='muteBtn' onClick={() => handleJSON({res: 'mute'})}>Mute</button>
-            <button id='unmuteBtn' onClick={() => handleJSON({res: 'unmute'})}>Unmute</button>
+            <div>
+                <button id='playBtn' onClick={() => handleJSON({res: 'play'})}>Play</button>
+                <button id='pauseBtn' onClick={() => handleJSON({res: 'pause'})}>Pause</button>
+            </div>
+            <div>
+                <button id='muteBtn' onClick={() => handleJSON({res: 'mute'})}>Mute</button>
+                <button id='unmuteBtn' onClick={() => handleJSON({res: 'unmute'})}>Unmute</button>
+            </div>
             <input id='setVolumeInput' type='number' min='0' max='100' placeholder='volume' onChange={() => 
             {
                 handleJSON({
@@ -44,7 +48,12 @@ export default function Header(props) {
             <button onClick={() => notify('Example notification')}>Example notification</button>
         </div>
         <Visualizer />
-        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+        <div style={{
+            display: 'inline-flex', 
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            justifySelf: 'flex-end'
+        }}>
             <span>server {serverConnected ? 
                 <span style={{color: '#00df81'}}>CONNECTED</span> : 
                 <span style={{color: 'red'}}>DISCONNECTED</span>}

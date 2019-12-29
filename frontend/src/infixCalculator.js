@@ -181,11 +181,15 @@ function calculatePostfix(postfix) {
 }
 
 /** @param {string} expression */
+function convertToReadable(expression) {
+	return expression.replace(/\*/g, ' razy ');
+}
+
+/** @param {string} expression */
 export default function calculateInfix(expression) {
     const postfix = calculatePostfix( convertInfixToPostfix(expression) );
 
     console.log(postfix);
 
-
-    notify(`${expression} równa się ${postfix}`);
+    notify(`${convertToReadable(expression)} równa się ${postfix}`);
 }
