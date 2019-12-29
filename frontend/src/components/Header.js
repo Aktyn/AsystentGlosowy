@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Microphone from './Microphone';
+import Visualizer from "./Visualizer";
 import {eventEmitter, handleJSON} from '../serverConnection';
 import SpeechModule from '../speechModule';
 
@@ -42,6 +43,7 @@ export default function Header(props) {
             }}>Reset speech module</button>
             <button onClick={() => notify('Example notification')}>Example notification</button>
         </div>
+        <Visualizer />
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
             <span>server {serverConnected ? 
                 <span style={{color: '#00df81'}}>CONNECTED</span> : 

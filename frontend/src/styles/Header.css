@@ -3,7 +3,7 @@
     text-align: right;
     height: 64px;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr fit-content(100%) 1fr;
     align-items: center;
     justify-content: space-between;
     background-color: #1f2a3a;
