@@ -2,7 +2,7 @@ import React from 'react';
 
 import '../styles/Visualizer.css';
 
-export default class YouTubeEmbed extends React.Component {
+export default class Visualizer extends React.Component {
 
     componentDidMount() {
         this.visualize();
