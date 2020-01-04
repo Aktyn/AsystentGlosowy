@@ -22,10 +22,9 @@ namespace Asystent.procedures {
 	public abstract class ProcedureBase {
 		private static Type[] procedures = { 
 			typeof(ExampleConfirmation), typeof(YoutubePlay), typeof(YoutubeVolume),
-			typeof(YoutubeMute), typeof(VolumeUnmute), typeof(YoutubeIncVolume),
-			typeof(YoutubeDecVolume), typeof(YoutubeStop), typeof(YoutubeResume),
+			typeof(YoutubeSound), typeof(YoutubeVolumeChange),typeof(YoutubePlayPause),
 			typeof(YoutubePlaylistSaveAs), typeof(YoutubeNext), typeof(YoutubePlaylistLoad),
-			typeof(Calculate)
+			typeof(Calculate), typeof(Stats), typeof(StatReset)
          };
 		private static Regex confirmRegex = new Regex(@"(tak|potwierd[zź]|potwierdzam|zatwierd[zź])",
 			RegexOptions.IgnoreCase | RegexOptions.Compiled);
