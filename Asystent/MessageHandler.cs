@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Asystent.common;
 using Asystent.procedures;
-using Fleck;
 using Newtonsoft.Json;
+using vtortola.WebSockets;
 
 namespace Asystent {
 	internal enum MessageType {
@@ -32,7 +32,7 @@ namespace Asystent {
 			_results = updatedResults;
 		}
 
-		private bool Execute(IWebSocketConnection clientConn) {
+		private bool Execute(WebSocket clientConn) {
 			if( _procedure == null ) {
 				var matchingProcedures = ProcedureBase.MatchProcedures(_results);
 			
@@ -51,7 +51,7 @@ namespace Asystent {
 
 				_procedure = matchingProcedures.First();
 				_procedure.OnSendData += data => {
-					clientConn.Send(JsonConvert.SerializeObject(data));
+					clientConn.WriteString(JsonConvert.SerializeObject(data));
 				};
 			}
 
@@ -75,9 +75,7 @@ namespace Asystent {
 			return resp;
 		}
 
-		private static SpeechResponse HandleSpeechResult(SpeechMessageSchema data, 
-			IWebSocketConnection clientConn) 
-		{
+		private static SpeechResponse HandleSpeechResult(SpeechMessageSchema data, WebSocket clientConn) {
 			if( _handler != null )
 				_handler.Update(data.results, data.result_index);
 			else
@@ -110,7 +108,7 @@ namespace Asystent {
 			return new SpeechResponse{res = "executed", index = data.result_index};
 		}
 		
-		public static void OnMessage(string message, IWebSocketConnection clientConn) {
+		public static void OnMessage(string message, WebSocket clientConn) {
 			Console.WriteLine("Message: " + message);
 			//example message:
 			//"{"type":1,"results":[{"result":"zagraj costam","confidence":0.618,"type":2}],"result_index":0}"
@@ -131,7 +129,7 @@ namespace Asystent {
 						
 						if(!Playlist.isEmpty())
 						{
-							clientConn.Send(JsonConvert.SerializeObject(new SongRequestSchema {
+							clientConn.WriteString(JsonConvert.SerializeObject(new SongRequestSchema {
 								res = "request_song", 
 								videos = Playlist.getNext()
 							}));
@@ -140,7 +138,7 @@ namespace Asystent {
 						else
 						{
 							Playlist.setCurrent(null);
-							clientConn.Send(JsonConvert.SerializeObject(new Playlist.PlaylistEndSchema {
+							clientConn.WriteString(JsonConvert.SerializeObject(new Playlist.PlaylistEndSchema {
                                 res = "end_playlist"
                             }));
 
@@ -153,7 +151,7 @@ namespace Asystent {
 				}
 
 				if (response != null)
-					clientConn.Send(JsonConvert.SerializeObject(response));
+					clientConn.WriteString(JsonConvert.SerializeObject(response));
 			}
 			catch (JsonReaderException) {
 				Console.WriteLine("Cannot parse message as JSON");

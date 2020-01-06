@@ -5,7 +5,7 @@ import calculateInfix from './infixCalculator';
 const EventEmitter = require('events');
 export const eventEmitter = new EventEmitter();
 
-const SERVER_URL = "ws://localhost:7000";
+const SERVER_URL = "ws://localhost:8006";
 let socket;
 let connected = false;//TODO: emitting connection change events
 
