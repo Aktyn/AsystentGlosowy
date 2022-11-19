@@ -12,7 +12,7 @@
 		"events": "^3.0.0",
 		"react": "^16.10.2",
 		"react-dom": "^16.10.2",
-		"react-scripts": "^3.3.0",
+		"react-scripts": "^5.0.1",
 		"react-youtube": "^7.9.0"
 	},
 	"eslintConfig": {
